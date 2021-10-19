@@ -58,6 +58,3 @@ class Rating(models.Model):
     rating = models.IntegerField(MinValueValidator(0, message="Rating mínimo é 0"), MaxValueValidator(5, message="Rating máximo é 5"))
     review = models.TextField() # review
 
-
-# TODO: verificar se todas as classes têm um object.id por natureza
-# TODO: uniformizar docstrings das classes
