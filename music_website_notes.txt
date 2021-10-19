@@ -1,0 +1,98 @@
+---- home.html: ----
+ - friso superior com link para as diversas páginas dentro do site:
+	- link: my music collection
+	- link: fórum
+	- link: fazer classificação e review de albums/artistas e music collections de outros utilizadores?
+	- link: os melhores albums/artistas e music collections de outros utilizadores de acordo com as classificações já feitas
+ 	- link: lista de artistas?
+	- link: lista de albums?
+	- link: lista de géneros musicais
+	- link: participar em polls feitas por outros users
+	- link: random band
+	- link: random album
+ - imagem de background
+ - logotipo do site no topo
+ - autores do site no rodapé, assim como algum link? (site do ISCTE? About Us? Form para enviar sugestões?)
+ - botões de Sign Up / Log In
+ - barra de search no topo
+ - Staff pick (cada um de nós escolhia um album para aparecer neste campo de sugestões)
+ - Friso grande com os 3 ou 5 albums melhor classificados até ao momento
+
+
+---- artist.html: ----
+
+---- discography.html: ----
+
+---- album.html: ----
+
+---- forum.html: ----
+
+---- user_collection.html: ----
+
+---- top_albums.html: ----
+
+---- top_artists.html: ----
+
+---- top_collections.html: ----
+
+---- registration_page.html: ----
+
+---- login_page.html: ----
+
+---- user_polls.html: ----
+
+
+APPS:
+ -x app_main
+ -x app_forum
+ -x app_polls
+ - app_user_collection
+ - app_music_archives
+ - app_users_manage
+
+
+GESTÃO DE UTILIZADORES:
+- 
+
+MODELO DADOS:
+ - Collection --
+   User ID FK
+   CollectionId INT (autonumber) PK
+   Title VARCHAR
+
+ - Artist --
+   ArtistId PK
+   DiscogsArtistId
+   Name
+   Bio
+   PictureUrl
+
+ - Record --
+   RecordId PK
+   ArtistId FK
+   DiscogsReleaseId
+   Title
+   Year
+   CoverPictureUrl
+
+ - Collection_Record --
+   RecordId FK PK
+   CollectionId FK PK
+   Tag TEXT
+
+ - Rating --
+   UserId FK PK
+   DiscogsReleaseId FK PK
+   Rating INT[0..5]
+   Review TEXT
+
+- Home/ Landing Page
+- Search - Explorar
+  |- Artista 
+  | - Album - [u] Adicionar à minha coleção
+	    - [u] Review/Rate
+- Registo / Login / ...
+- U - Coleções 
+- U - Criar / Editar Coleção (apagar)
+    |- Albuns
+    |- Artista 
