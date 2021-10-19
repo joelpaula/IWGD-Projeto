@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-#dhbvjshbv
+#22h23
 
 class Collection(models.Model):
-    """collection of records"""
+    """collection of records | id; user_id (FK); name; creation_date"""
     user_id = models.ForeignKey(User, on_delete=models.CASCADE) #user_id FK
     #collection_id PK
     name = models.CharField(max_length=50) # collection name/title
@@ -17,6 +17,7 @@ class Collection(models.Model):
 
 
 class Artist(models.Model):
+    """artist | id; discogs_artist_id; name; bio; picture_url"""
     #artist_id PK
     discogs_artist_id = models.IntegerField() # artist id as in discogs
     name = models.CharField(max_length=200) 
@@ -28,6 +29,7 @@ class Artist(models.Model):
 
 
 class Record(models.Model):
+    """artist album | id; artist_id; (FK); discogs_release_id; title; year; cover_url """
     #record_id PK
     artist_id = models.ForeignKey(Artist, on_delete=models.CASCADE) #artist_id FK
     discogs_release_id = models.IntegerField() # album id as in discogs
@@ -48,19 +50,14 @@ class Collection_Record(models.Model):
     def __str__(self):
         return f"Album {Record.objects.get(pk=self.record_id).title} na coleção {Collection.objects.get(pk=self.collection_id).name} do user {Collection.objects.get(pk=self.collection_id).user_id}" # TODO: tentar aceder a atributos de classes do models assim funciona?
 
-#    discogs_release_id = models.IntegerField(primary_key=True) #Record.objects.get(pk = record_id).discogs_release_id #discogs_release_id FK PK
- #   rating = models.ForeignKey(Rating, on_delete=CASCADE) #models.IntegerField(choices={0, 1, 2, 3, 4, 5})
-
 
 class Rating(models.Model):
     """links a user to a rating/review of a specif record | id; user_id(FK PK); discogs_release_id(FK PK); rating; review"""
-    # TODO
-    # user_id FK PK
-    # discogs_release_id FK PK
+    user_id = user_id = models.ForeignKey(User, on_delete=models.CASCADE, primary_key=True) # user_id FK PK
+    # TODO: discogs_release_id = models.IntegerField(primary_key=True) # discogs_release_id FK PK
     rating = models.IntegerField(MinValueValidator(0, message="Rating mínimo é 0"), MaxValueValidator(5, message="Rating máximo é 5"))
-    # review
+    review = models.TextField(max_length=200) # review
 
-    pass
 
 # TODO: verificar se todas as classes têm um object.id por natureza
 # TODO: uniformizar docstrings das classes
