@@ -54,9 +54,9 @@ class Collection_Record(models.Model):
 class Rating(models.Model):
     """links a user to a rating/review of a specif record | id; user_id(FK PK); discogs_release_id(FK PK); rating; review"""
     user_id = user_id = models.ForeignKey(User, on_delete=models.CASCADE, primary_key=True) # user_id FK PK
-    # TODO: discogs_release_id = models.IntegerField(primary_key=True) # discogs_release_id FK PK
+    record_id = models.IntegerField(primary_key=True) # record_id FK PK
     rating = models.IntegerField(MinValueValidator(0, message="Rating mínimo é 0"), MaxValueValidator(5, message="Rating máximo é 5"))
-    review = models.TextField(max_length=200) # review
+    review = models.TextField() # review
 
 
 # TODO: verificar se todas as classes têm um object.id por natureza
