@@ -1,0 +1,41 @@
+TEMPLATES - APP HOME:
+
+1 - landing_page.html, with:
+    - link to: search_page.html
+    - link to: collections_list.html
+    - link to: login_signup.html
+
+2 - search_page.html, with:
+    - link to: artist_page.html
+    - link to: record_page.html
+
+3 - login_signup.html
+
+4 - artist_page.html, with:
+    - link to: record_page.html
+    - link to: views.rate_artist / rate_artist.html # (?) criar nova classe de rating no models
+    - link to: views.review_artist / review_artist.html # (?) 
+
+5 - record_page.html, with:
+    - link to: views.add_to_collection
+    - link to: views.rate_record / rate_record.html
+    - link to: views.review_record / review_record.html
+    - link to: views.play_album # integrar com spotify/youtube?
+
+
+TEMPLATES - APP COLLECTION:
+
+1 - collections_list.html, with:
+    - link to: views.create_collection
+    - link to: single_collection.html
+
+2 - single_collection.html, with:
+    - link to: edit_collection.html
+    - link to: views.delete_collection
+    - link to: views.edit_tag
+    - link to: record_page.html
+
+3 - edit_collection.html, with:
+    - link to: views.add_new_record
+    - link to: views.delete_record
+
