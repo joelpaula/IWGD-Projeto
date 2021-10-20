@@ -22,6 +22,14 @@ TEMPLATES - APP HOME:
     - link to: views.review_record / review_record.html
     - link to: views.play_album # integrar com spotify/youtube?
 
+6 - rate_artist.html
+
+7 - review_artist.html
+
+8 - rate_record.html
+
+9 - review_record.html
+
 
 TEMPLATES - APP COLLECTION:
 
