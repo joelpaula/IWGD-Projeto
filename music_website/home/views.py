@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from music_website.collection.models import Like_Artist
+from collection.models import Like_Artist
 import discogs_client
 
 
@@ -16,9 +16,8 @@ def search(request, collection_id = None):
 
 def save_like_artist(request, artist_id, like):
     if like == False:
-        #get POST
-    
-    pass
+        #get POST do like
+        pass
 
 
 def artist(request, artist_id, collection_id=None):
