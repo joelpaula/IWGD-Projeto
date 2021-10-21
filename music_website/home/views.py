@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from collection.models import Like_Artist
+#from . import models.Like_Artist
 import discogs_client
 
 
@@ -52,4 +52,31 @@ def record(request, record_id):
 
 
 def play(request):
+    pass
+
+
+def add_to_collection(request):
+    pass
+
+
+def add_to_collection_save(request):
+    pass
+
+
+def add_ratreview(request):
+    pass
+
+
+def add_ratreview_save(request):
+    pass
+
+
+
+
+
+def collections(request, user_id):
+    pass
+
+
+def mycollection(request, user_id, collection_id):
     pass
