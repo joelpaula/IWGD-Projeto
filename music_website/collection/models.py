@@ -76,6 +76,3 @@ class Like_Artist(models.Model):
         managed = False
         db_table = 'Like_Artist'
         unique_together = (('user_id', 'artist_id'),)
-
-
-# TODO: update com as classes adicionais do esquema
