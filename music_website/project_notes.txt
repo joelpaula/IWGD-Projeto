@@ -47,3 +47,14 @@ TEMPLATES - APP COLLECTION:
     - link to: views.add_new_record
     - link to: views.delete_record
 
+
+
+https://www.discogs.com/applications/edit/39781
+
+Consumer Key cKSyLXiSxCJNlrKOxolL
+Consumer Secret AyGJnWvaPdeUCzFLPTgpWruaqIKRvujS
+
+curl --location --request GET 'https://api.discogs.com/database/search?type=artist&q=bauhaus' \
+--header 'User-Agent: Grupo22TestDjangoProject/0.1 +https://github.com/joelpaula/Interfaces-Web' \
+--header 'Authorization: Discogs key=cKSyLXiSxCJNlrKOxolL, secret=AyGJnWvaPdeUCzFLPTgpWruaqIKRvujS' \
+--header 'Cookie: __cf_bm=4qCa2Nur1r.1LibFIUKx5awIKutXwtGVk02VUsD6_MU-1634814668-0-AdN5rETDfFjQ/PQur2l5JWYPBHpHeItiTSj+BWPT/LIWn9Jh1rfGf76caEaXU+zF/VA08/yA6LNlkJh7cu929MA='
