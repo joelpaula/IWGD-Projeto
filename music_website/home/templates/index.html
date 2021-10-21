@@ -1,0 +1,10 @@
+{% extends './base.html' %}
+{% block content %}
+<h1Music collection</h1>
+
+{% if user.is_superuser %}
+<a href="mycollection">My Collections</a> | 
+<a href="myreviews">My Reviews</a>
+<a href="myartist">My Artists</a>
+{% endif %}
+{% endblock %}
