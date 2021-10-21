@@ -26,21 +26,4 @@ def artist(request, collection_id):
     # mostra foto do artista
     # mostra lista de albums do artista
     
-    # se user autenticado:
-        # se collection_id != None:
-            # mostra o like
-        # mostra opcao de add to collection em cada record da lista de records do artista
-
-    # em qualquer caso de autenticacao de user:
-        
-
-
-    if collection_id is not None:
-        pass
-    else:
-        pass
-    # like
-    # artist name
-    # artist bio
-    # artist records list
-    # artist photo
+    
