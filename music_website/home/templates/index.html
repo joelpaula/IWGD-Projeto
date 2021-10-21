@@ -1,10 +1,34 @@
 {% extends './base.html' %}
 {% block content %}
 <h1Music collection</h1>
+<div>
+    <a href="search">Search...</a>
+</div>
+<div>
+    <h2>MUSIC COLLECTION</h2>
+    <p>
+    Descubra a plataforma que você não sabia que precisava! Faça a gestão da suas coleções e deixe reviews e likes nas músicas que desejar.
+    Todas estas funcionalidades e muitas mais apenas à distância de um Registo/LogIn!
+    </p>
+</div>
 
+<div class="col-2">
 {% if user.is_superuser %}
 <a href="mycollection">My Collections</a> | 
-<a href="myreviews">My Reviews</a>
+<a href="myreviews">My Reviews</a> |
 <a href="myartist">My Artists</a>
+</div>
+
+
+<footer>
+    <p>Author:  Catarina Castanheira
+                João Martins
+                Joel Paula
+    </p>
+    <p>
+        <a href="mailto:secretariado.ista@iscte-iul.pt">secretariado.ista@iscte-iul.pt</a>
+    </p>
+</footer>
+
 {% endif %}
 {% endblock %}
