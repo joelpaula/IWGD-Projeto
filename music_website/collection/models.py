@@ -65,3 +65,17 @@ class Rating(models.Model):
         managed = False
         db_table = 'Rating'
         unique_together = (('user_id', 'record_id'),)
+
+
+class Like_Artist(models.Model):
+    """links a user to a like option of a given artist | id; user_id(FK PK); artist_id(FK PK); like"""
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE) # user_id FK PK
+    artist_id = models.ForeignKey(Artist, on_delete=models.CASCADE) # artist_id FK PK
+    like = models.BooleanField() # True/false
+    class Meta:
+        managed = False
+        db_table = 'Like_Artist'
+        unique_together = (('user_id', 'artist_id'),)
+
+
+# TODO: update com as classes adicionais do esquema
