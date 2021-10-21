@@ -43,8 +43,6 @@ def artist(request, artist_id, collection_id=None):
     return render(request, template, context)
 
 
-
-
 def record(request, record_id):
     # cover
     # rating
