@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+  {% if form.errors %}
+  <div class="alert alert-primary d-flex align-items-center" role="alert">
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+    <div>
+    Your username and password didn't match. Please try again.
+    </div>
+    <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y pe-4" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+
+  {% if next %}
+  <div class="alert alert-primary d-flex align-items-center alert-dismissible fade show" role="alert">
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+    <div>
+    {% if user.is_authenticated %}
+      Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.
+    {% else %}
+      <p>Please login to see this page.</p>
+    {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div class="form-group mb-2 col-6">
+      <label for="{{ form.username.id_for_label }}">Username:</label>
+      {{ form.username|add_class:'form-control' }}
+    </div>
+    <div class="form-group mb-2 col-6">
+      <label for="{{ form.password.id_for_label }}">Password:</label>
+      {{ form.password|add_class:'form-control' }}
+    </div>
+    <input type="submit" value="login" class="btn btn-primary mb-2 col-6" />
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+
+  {# Assumes you setup the password_reset view in your URLconf #}
+  <p class="mb-2 col-6">
+    <a href="{% url 'password_reset' %}">Lost password?</a>
+  </p>
+
+{% endblock %}

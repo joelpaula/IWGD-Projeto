@@ -4,10 +4,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from home.discogs import discog_artist, discog_record
 from home.models import Rating, Record, Like_Artist
+from django.contrib.auth.decorators import login_required
+
+# from models import Like_Artist
+# from discogs import discog_artist, discog_record
 
 
 def home_index(request):
-    HttpResponse("Welcome!")
+    return render(request, "index.html")
 
 
 def search_artist(request, collection_id = None):
@@ -78,19 +82,19 @@ def record(request, d_record, d_artist, collection_id=None):
 def play(request):
     pass
 
-
+@login_required
 def add_to_collection(request):
     pass
 
-
+@login_required
 def add_to_collection_save(request):
     pass
 
-
+@login_required
 def add_ratreview(request):
     pass
 
-
+@login_required
 def add_ratreview_save(request):
     pass
 
