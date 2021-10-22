@@ -1,0 +1,32 @@
+{% extends './base.html' %}
+{% block content %}
+<script>
+    const button = document.querySelector('.btn')
+    button.addEventListener('click', () => {
+        button.classList.toggle('liked')
+    })
+</script>
+<h1>Artist</h1>
+<div>
+    <figure>
+        <img src="" alt="Profile Picture" style="width:100%">
+    </figure>
+</div>
+
+<button class="btn btn-like">
+    <span class="btn-icon btn--icon-default">
+        <span class="fa fa-heart"></span>
+    </span>
+    <span class="btn-icon btn--icon-liked">
+        <span class="fa fa-heart"></span>
+    </span>
+    <span class="btn-content  btn-content--liked">
+        Liked
+    </span>
+    <span class="btn-content btn-content--default">
+        Like
+    </span>
+</button>
+
+{% endif %}
+{% endblock %}
