@@ -1,11 +1,12 @@
-from _typeshed import Self
 import requests
+
 
 headers = {
     'User-Agent': 'Grupo22TestDjangoProject/0.1 +https://github.com/joelpaula/Interfaces-Web',
     'Authorization': 'Discogs key=cKSyLXiSxCJNlrKOxolL, secret=AyGJnWvaPdeUCzFLPTgpWruaqIKRvujS'
 }
 baseurl = "https://api.discogs.com"
+
 
 class discog_artist:
     def __init__(self, title, discogs_id, cover_image):
