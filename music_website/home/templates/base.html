@@ -12,7 +12,24 @@
   <body>
     <div class="container">
       <div class="row justify-content-center">
-      <img class="col-8" src="{% static 'home/images/rgb_iscte_pt_horizontal_positive.png' %}">
+        <img class="col-6" src="{% static 'home/images/rgb_iscte_pt_horizontal_positive.png' %}">
+        <div class="col-2">
+          <hr class="mt-0 mb-4">
+          <div>
+            {% if user.is_authenticated %}
+              Hello, {{ user.username }}!
+            {% else %}
+              <a href="registar">Register</a>
+            {% endif %}
+          </div>
+          <div>
+            {% if user.is_authenticated %}
+                <a href="logout">Logout</a>
+            {% else %}
+                <a href="login">Login</a>
+            {% endif %}
+          </div>
+        </div>
       </div>
       <div class="row justify-content-center">
         <div class="col-8">
@@ -20,21 +37,21 @@
           {% block content %}
           {% endblock %}
         </div>
-        <div class="col-2">
-          <hr class="mt-0 mb-4">
-          {% if user.is_authenticated %}
-            Hello, {{ user.username }}!
-          {% else %}
-            <a href="registar">Register</a>
-          {% endif %}
-          <div class="col-2">
-            {% if user.is_authenticated %}
-                <a href="logout">Logout</a>
-            {% else %}
-                <a href="login">Login</a>
-            {% endif %}
-        </div>
-        </div>
+      </div>
+    </div>
+    <div class="container fixed-bottom">
+      <div class="row justify-content-center">
+        <footer class="col-8 bg-light">
+          <div>
+            <p class="small mb-0 text-dark">Author:  Catarina Castanheira |
+                      João Martins |
+                      Joel Paula |
+            </p>
+            <p class="small mb-0 text-dark">
+              <a href="mailto:secretariado.ista@iscte-iul.pt">secretariado.ista@iscte-iul.pt</a>
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   </body>
