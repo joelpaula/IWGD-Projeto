@@ -2,12 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from models import Like_Artist
-from discogs import discog_artist, discog_record
+from django.contrib.auth.decorators import login_required
+
+# from models import Like_Artist
+# from discogs import discog_artist, discog_record
 
 
 def home_index(request):
-    HttpResponse("Welcome!")
+    return render(request, "index.html")
 
 
 def search_artist(request, collection_id = None):
@@ -60,19 +62,19 @@ def record(request, record_id):
 def play(request):
     pass
 
-
+@login_required
 def add_to_collection(request):
     pass
 
-
+@login_required
 def add_to_collection_save(request):
     pass
 
-
+@login_required
 def add_ratreview(request):
     pass
 
-
+@login_required
 def add_ratreview_save(request):
     pass
 
