@@ -1,5 +1,40 @@
-{% csrf token%}
-<form id="form" view> 
-    <input type="search" id="query" name="searchartist" placeholder="Search...">
-    <button>Search</button>
-  </form>
+{% extends './base.html' %}
+{% block content %}
+
+<p class="lead">Type the name or part of the name of your favorite artist or favorite record and press search and we'll try to get it for you</p>
+
+<form method="POST" class="row row-cols-lg-12 g-1 align-items-center">
+  {% csrf_token %}
+  <div class="col-10">
+    <label class="visually-hidden" for="query">Artist or record</label>
+    <div class="input-group">
+      <input type="text" class="form-control" name="query" id="query" placeholder="Artist or record name" value="{{ query }}">
+    </div>
+  </div>
+  <div class="col">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+<div class="bd-example g-0 p-1">
+  {% for result in results %}
+  {% cycle '<div class="row g-0">' ''%}
+  <div class="card col-6 mb-2">
+    <img src="{{ result.cover_image }}" class="card-img-top" alt="{{ result.title }} cover image">
+    <div class="card-body">
+      <h5 class="card-title">{{ result.title }}</h5>
+      <span class="badge rounded-pill bg-dark position-absolute top-0 end-0 m-2">{{ result.type_ }}</span>
+      <p class="card-text overflow-hidden" style="max-height: 16em">
+      {% if result.type_ == "Record" %}
+      {{ result.specifics.year }}
+      {% else %}
+      {{ result.specifics.bio }}
+      {% endif %}
+      </p>
+      <a href="{% if result.type_ == Result.RECORD %}{% url 'home:record' result.id %}{% else %}{% url 'home:artist' result.id %}{% endif %}" class="btn btn-primary">Go to </a>
+    </div>
+  </div>
+  {% cycle '' '</div>'%}
+  {% endfor %}
+</div>
+{% endblock %}

@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from home.discogs import discog_artist, discog_record
+from home.discogs import DiscogsArtist, DiscogsRecord
 from home.models import Rating, Record, Like_Artist
 from django.contrib.auth.decorators import login_required
 from .forms import NewUserForm
 from django.contrib import messages
+from home.search import Search, Result
 
 # from models import Like_Artist
 # from discogs import discog_artist, discog_record
@@ -25,6 +26,14 @@ def register(request):
 
 def home_index(request):
     return render(request, "index.html")
+
+def search(request):
+    context = {}
+    if request.method == "POST" and request.POST["query"]:
+        context["query"] = request.POST["query"]
+        res = Search().search(request.POST["query"])
+        context["results"] = res
+    return render(request, "search.html", context=context)
 
 
 def search_artist(request, collection_id = None):
