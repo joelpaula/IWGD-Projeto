@@ -3,8 +3,10 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from home.discogs import discog_artist, discog_record
-from home.models import Rating, Record, Like_Artist
+from home.models import Artist, Rating, Record, Like_Artist
 from django.contrib.auth.decorators import login_required
+
+from music_website.home.models import Collection, Collection_Record
 from .forms import NewUserForm
 from django.contrib import messages
 
@@ -42,7 +44,7 @@ def get_artist(request, artist_id):
     pass
 
 
-def artist(request, d_artist):
+def artist(request, artist_id):
     """IN: d_artist (class discog_artist), collection_id (int) |
     processa dados para página do Artista;
     se user autenticado, busca info do like"""
@@ -51,48 +53,52 @@ def artist(request, d_artist):
     if request.user.is_authenticated:
         like = Like_Artist.objects.get(user_id=request.user.id).like #TODO: verificar atributo
 
-    artist_name = d_artist.title  # para mostrar nome de artista
-    artist_bio = d_artist.bio # para mostrar bio de artista 
-    artist_pic = d_artist.cover_image # para mostrar foto do artista 
+    artist_name = Artist.objects.get(artist_id=artist_id).name  # para mostrar nome de artista
+    artist_bio = Artist.objects.get(artist_id=artist_id).bio # para mostrar bio de artista 
+    artist_pic =  Artist.objects.get(artist_id=artist_id).picture_url # para mostrar foto do artista 
     # artist_releases = d_artist.releases # para mostrar lista de albums do artista # TODO: artist_releases
     
-    context = {'like': like, 'artist_name': artist_name, 'artist_bio': artist_bio, 'artist_pic': artist_pic, 'artist_releases': artist_releases, 'd_artist_id': d_artist.discogs_id}
+    context = {'like': like, 'artist_name': artist_name, 'artist_bio': artist_bio, 'artist_pic': artist_pic}
     template = 'home/artist.html'
     
     return render(request, template, context)
 
 
-def record(request, d_record, d_artist, collection_id=None):
-    collection_to_add_to = collection_id
-    artist_name = d_artist.title
-    record_name = d_record.title
-    # track_list = d_record.tracklist # lista de faixas do album # TODO: track_list
-    # ??track_times = d_record.tracktimes # tempos de cada faixa do album # TODO: tracktimes
+def record(request, record_id, collection_id=None):
     if request.user.is_authenticated:
         if collection_id is not None: # se user parte de colecção para lhe adicionar um record
             collection_to_add_to = collection_id
         try:
-            user_rating = Rating.objects.filter(user_id=request.user.id, record_id=Record.objects.filter(discogs_release_id=d_record.discogs_master_id)).rating # TODO: testar 
+            user_rating = Rating.objects.filter(user_id=request.user.id, record_id=record_id).rating    # TODO: testar 
         except:
             user_rating = None
         try:
-            record_found_in =  []#TODO: lista de nomes de coleções do user onde o record está
+            record_found_in =  Collection_Record.objects.filter(record_id=record_id, collection_id=Collection.objects.filter(user_id = request.user.id)) # lista de nomes de coleções do user onde o record está    # TODO: testar
         except:
             record_found_in = []
-    # se user loggado:
-        # se há rating do user:
-            # user_rating
-        # se album em alguma colecao do user:
-            # collection_name
-    # votes_count
-    # avg_rating
-    # record_cover
-    context = {'collection_to_add_to': collection_to_add_to}
+   
+    collection_to_add_to = collection_id
+    artist_name = Artist.objects.get(id=Record.objects.get(id=record_id).artist_id).name
+    record_name = Record.objects.get(id=record_id).title
+    release_year = Record.objects.get(id=record_id).year
+    # track_list = d_record.tracklist # lista de faixas do album    # TODO: get track_list
+    # ??track_times = d_record.tracktimes # tempos de cada faixa do album   # TODO: get tracktimes
+    votes_count = Rating.objects.filter(record_id=record_id).count() # contagem de pares de (record_id=rating_id, user_id) em Rating
+    rating_sums = 0
+    i = 0
+    for rating in Rating.objects.filter(record_id=record_id).rating:
+        rating_sums += rating
+        i += 1
+    avg_rating = rating_sums / i    # TODO: simplificar
+    record_cover = Record.objects.get(record_id=record_id).cover_url
     
-    pass
+    context = {'collection_to_add_to': collection_to_add_to, 'user_rating': user_rating, 'record_found_in': record_found_in, 'collection_to_add_to': collection_to_add_to, 'artist_name': artist_name, 'record_name': record_name, 'release_year': release_year, 'votes_count': votes_count, 'avg_rating': avg_rating, 'record_cover': record_cover}
+    template = 'home/record.html'
+    
+    return render(request, template, context)
 
 
-def play(request):
+def play_record(request):
     pass
 
 @login_required
