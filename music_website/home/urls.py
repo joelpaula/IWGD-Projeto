@@ -1,6 +1,6 @@
 from django.urls import path
 
-from home.discogs import discog_artist
+from home.discogs import DiscogsArtist
 from home import views
 
 
@@ -11,7 +11,8 @@ urlpatterns = [
     path('my_collections/<int:user_id>/<int:collection_id>', views.mycollection, name='mycollection'),
     path('', views.home_index, name='home_index'),
     path('register', views.register, name="register"),
-    path('record', views.record, name='record'),
- #    path('artist/<int:d_artist.discogs_id>', views.artist, name='artist', kwargs={'d_artist': d_artist})
+    path('search', views.search, name="search"),
+    path('artist/<int:artist_id>', views.artist, name='artist'),
+    path('record/<int:record_id>', views.record, name='record'),
 
 ]
