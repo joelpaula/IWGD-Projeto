@@ -7,7 +7,7 @@ p {
     color: green;
 }
 
-:root {
+/* :root {
     --red: rgb(209, 3, 3);
     --white: #fff;
     --black: #000;
@@ -39,9 +39,9 @@ p {
 .btn-like.liked {
     background: var(--red);
     border-color: var(--red);
-}
+} */
 /*-- Button Icon -- */
-.btn-icon {
+/* .btn-icon {
     display: inline-block;
     width: 32px;
     height: 36px;
@@ -72,13 +72,13 @@ p {
 .liked .btn--icon-liked {
     opacity: 1;
     left: 1.5rem;
-}
+} */
 /*-- Button Content -- */
-.btn-content {
+/*.btn-content {
     transition: transform 0.1s ease;
     display: inline-block;
     /* position: absolute;
-    right: 0; */
+    right: 0; *//*
 }
 .liked .btn-content {
     color: var(--white);
@@ -94,4 +94,4 @@ p {
 }
 .liked .btn-content--default {
     transform: translate(24px)
-}
+} */

@@ -1,0 +1,124 @@
+{% extends '../base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h2>Register new user</h2>
+
+  {% if form.errors %}
+    <div class="alert alert-primary d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+        <div>
+        {{ form.errors }}
+        </div>
+    </div>  
+  {% endif %}
+
+
+<form method="POST" id="register-form" class="form-inline"
+    oninput='password2.setCustomValidity(password2.value != password1.value ? "Passwords should match." : "")'>
+    {% csrf_token %}
+
+    <div class="form-group mb-2 row">
+        <label for="{{ form.first_name.id_for_label }}" class="col-sm-4 col-form-label">First name:</label>
+        <div class="col-sm-4">{{ form.first_name|add_class:'form-control form-control-sm mb-0' }}</div>
+        {% if form.first_name.help_text %}
+            <small class="form-text text-muted col-sm-4">{{ form.first_name.help_text }}</small>
+        {% endif %}
+        {% if form.first_name.errors %}
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <div>
+                {{ form.first_name.errors }}
+                </div>
+            </div>  
+        {% endif %}        
+    </div>
+    
+    <div class="form-group mb-2 row">
+        <label for="{{ form.last_name.id_for_label }}" class="col-sm-4 col-form-label">Last name:</label>
+        <div class="col-sm-4">{{ form.last_name|add_class:'form-control form-control-sm mb-2' }}</div>
+        {% if form.last_name.help_text %}
+            <small class="form-text text-muted col-sm-4">{{ form.last_name.help_text }}</small>
+        {% endif %}
+        {% if form.last_name.errors %}
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <div>
+                {{ form.last_name.errors }}
+                </div>
+            </div>  
+        {% endif %}        
+    </div>
+    
+    <div class="form-group mb-2 row">
+        <label for="{{ form.username.id_for_label }}" class="col-sm-4 col-form-label">Username:</label>
+        <div class="col-sm-4">{{ form.username|add_class:'form-control form-control-sm mb-2' }}</div>
+        {% if form.username.help_text %}
+            <small class="form-text text-muted col-sm-4">{{ form.username.help_text }}</small>
+        {% endif %}
+        {% if form.username.errors %}
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <div>
+                {{ form.username.errors }}
+                </div>
+            </div>  
+        {% endif %}        
+    </div>
+    <div class="form-group mb-2 row">
+        <label for="{{ form.email.id_for_label }}" class="col-sm-4 col-form-label">E-mail address:</label>
+        <div class="col-sm-4">{{ form.email|add_class:'form-control form-control-sm mb-2' }}</div>
+        {% if form.email.help_text %}
+            <small class="form-text text-muted col-sm-4">{{ form.email.help_text }}</small>
+        {% endif %}
+        {% if form.email.errors %}
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <div>
+                {{ form.email.errors }}
+                </div>
+            </div>  
+        {% endif %}        
+    </div>
+    <div class="form-group mb-2 row">
+        <label for="{{ form.password1.id_for_label }}" class="col-sm-4 col-form-label">Password:</label>
+        <div class="col-sm-4">{{ form.password1|add_class:'form-control form-control-sm mb-2' }}</div>
+        {% if form.password1.help_text %}
+            <small class="form-text text-muted col-sm-4">{{ form.password1.help_text }}</small>
+        {% endif %}
+        {% if form.password1.errors %}
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <div>
+                {{ form.password1.errors }}
+                </div>
+            </div>  
+        {% endif %}        
+    </div>
+    <div class="form-group mb-2 row">
+        <label for="{{ form.password2.id_for_label }}" class="col-sm-4 col-form-label">Confirm password:</label>
+        <div class="col-sm-4">{{ form.password2|add_class:'form-control form-control-sm mb-2' }}</div>
+        {% if form.password2.help_text %}
+            <small class="form-text text-muted col-sm-4">{{ form.password2.help_text }}</small>
+        {% endif %}
+        {% if form.password2.errors %}
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <div>
+                {{ form.password2.errors }}
+                </div>
+            </div>  
+        {% endif %}        
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </div>
+    <p class="mb-2 col-8">
+    Already have an account? Login <a href="{% url 'login' %}">here</a>.
+    </p>
+</form>
+{% endblock %}

@@ -1,14 +1,27 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from home.discogs import discog_artist, discog_record
 from home.models import Rating, Record, Like_Artist
 from django.contrib.auth.decorators import login_required
+from .forms import NewUserForm
+from django.contrib import messages
 
 # from models import Like_Artist
 # from discogs import discog_artist, discog_record
 
+def register(request):
+    if request.method == "POST":
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful." )
+            return redirect("/")
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = NewUserForm()
+    return render (request=request, template_name="registration/register.html", context={"form":form})    
 
 def home_index(request):
     return render(request, "index.html")
@@ -63,7 +76,7 @@ def record(request, d_record, d_artist, collection_id=None):
         except:
             user_rating = None
         try:
-            record_found_in =  #TODO: lista de nomes de coleções do user onde o record está
+            record_found_in =  []#TODO: lista de nomes de coleções do user onde o record está
         except:
             record_found_in = []
     # se user loggado:

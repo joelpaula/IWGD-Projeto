@@ -30,7 +30,7 @@
             {% if user.is_authenticated %}
               Hello, {{ user.username }}!
             {% else %}
-              <a href="registar">Register</a>
+              <a href="{% url 'home:register' %}">Register</a>
             {% endif %}
           </div>
           <div>
