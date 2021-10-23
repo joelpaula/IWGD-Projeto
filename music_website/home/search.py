@@ -1,3 +1,4 @@
+import Levenshtein as lev
 import home.discogs as discogs
 from home.models import Artist, Record
 
@@ -13,6 +14,7 @@ class Result:
         self.cover_image = cover_image
         self.type_ = type_
         self.specifics = {}
+        self.matching = 0
 
     def __str__(self) -> str:
         return f"[{self.discogs_id}] {self.title}"
@@ -27,8 +29,15 @@ class Search:
 
         res.extend(self._get_discogs_artists(query))
         res.extend(self._get_discogs_records(query))
+        res = self.order_results(query, res)
 
         return res
+    
+    def order_results(self, query, results):
+        for item in results:
+            item.matching = lev.distance(item.title, query)
+
+        return sorted(results, key=lambda x: x.matching)
 
     def _get_discogs_records(self, query):
         res = []
