@@ -15,5 +15,6 @@ urlpatterns = [
     path('artist/<int:artist_id>/like_artist', views.save_like_artist, name='like_artist'),
     path('review', views.review, name='review'),
     path('review/<int:review_id>', views.review, name='review'),
+    path('reviews', views.reviews, name='reviews'),
     path('mycollections/<str:username>', views.mycollections, name='mycollections'),
 ]

@@ -1,0 +1,30 @@
+{% extends './base.html' %}
+{% block content %}
+<h1>My Review</h1>
+
+{% for review in reviews %}
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{review.record_id.cover_url}}" class="img-fluid rounded-start" alt="{{review.record_id.title}} record cover">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <span class="badge bg-light text-dark">{{review.record_id.artist_id.name}}</span>
+        <h5 class="card-title">{{review.record_id.title}}</h5>
+        <span class="badge rounded-pill bg-secondary">{{review.record_id.year}}</span>
+        <span style="float: right;">
+        {% with ''|center:review.rating as range %}
+        {% for _ in range %}
+            <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+        {% endfor %}
+        {% endwith %}
+        </span>
+        <p class="card-text">{{review.review}}</p>
+        <a href="{% url 'home:review' review.pk %}">edit</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
