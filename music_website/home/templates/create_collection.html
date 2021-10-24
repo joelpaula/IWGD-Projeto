@@ -1,0 +1,20 @@
+{% extends './base.html' %}
+{% block content %}
+
+<h1> Criar Nova Coleção </h1>
+<br>
+
+<h2>{{ error_message }}</h2>
+<br>
+
+<form method="POST" action = "{% url 'home:save_new_collection' user.username %}">
+    {% csrf_token %}
+    <label for="collection_name">Nome da Coleção:</label>
+    <input type="text" id="collection_name" name="collection_name" autofocus>
+    <p>
+        <input type="submit" value="Criar">
+    </p>
+</form>
+
+
+{% endblock %}

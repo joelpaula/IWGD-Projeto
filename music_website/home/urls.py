@@ -14,6 +14,7 @@ urlpatterns = [
     path('record/save/d/<int:discogs_master_id>', views.discogs_save_record, name='discogs_save_record'),
     path('artist/<int:artist_id>/like_artist', views.save_like_artist, name='like_artist'),
     path('mycollections/<str:username>', views.mycollections, name='mycollections'),
-
+    path('mycollections/<str:username>/new_collection', views.new_collection_form, name='new_collection_form'),
+    path('mycollections/<str:username>/save_collection', views.save_new_collection, name='save_new_collection'),
 
 ]
