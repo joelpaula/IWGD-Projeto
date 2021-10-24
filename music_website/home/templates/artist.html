@@ -37,7 +37,7 @@
     <p>Already liked this artist</p>
 {% else %}
     <p>Not yet rated</p>
-    <a href="/home/{{ artist.id }}/like_artist">
+    <a href="{% url 'home:like_artist' artist.id %}">
         Like this artist!
     </a>
 {% endif %}

@@ -60,9 +60,10 @@ def search_artist(request, collection_id = None):
 
 @login_required
 def save_like_artist(request, artist_id):
-    Like_Artist.objects.create(user_id = request.user.id, artist_id = artist_id, like=True)
-    
-    return HttpResponseRedirect(reverse('artist.html', args=(artist_id)))
+    try:
+        Like_Artist.objects.create(user_id_id = request.user.id, artist_id_id = artist_id, like=True)
+    finally:
+        return HttpResponseRedirect(reverse('home:artist', args=(artist_id,)))
 
 
 def get_artist(request, artist_id):
