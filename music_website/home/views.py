@@ -39,9 +39,9 @@ def search(request):
 
 def artist_discogs_save(request, discogs_id):
     print(f"Saving discogs artist {discogs_id} to database...")
-    
+
     print(f"Redirecting to proper artist page")
-    return render(request, "search.html", context=context)
+    return render(request, "search.html")
 
 def search_artist(request, collection_id = None):
     pass
