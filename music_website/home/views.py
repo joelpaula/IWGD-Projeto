@@ -154,9 +154,10 @@ def add_ratreview_save(request):
     pass
 
 
-def collections(request):
+def single_collection(request):
     pass
 
 
-def mycollection(request, collection_id):
-    pass
+def mycollections(request, username):
+    collections_list = Collection.objects.filter(user_id=request.user.id)
+    return render(request, 'mycollections.html', {'collections_list': collections_list})

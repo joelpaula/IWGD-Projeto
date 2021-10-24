@@ -12,6 +12,8 @@ urlpatterns = [
     path('record/<int:record_id>', views.record, name='record'),
     path('artist/save/d/<int:discogs_id>', views.discogs_save_artist, name='discogs_save_artist'),
     path('record/save/d/<int:discogs_master_id>', views.discogs_save_record, name='discogs_save_record'),
-    path('artist/<int:artist_id>/like_artist', views.save_like_artist, name='like_artist')
+    path('artist/<int:artist_id>/like_artist', views.save_like_artist, name='like_artist'),
+    path('mycollections/<str:username>', views.mycollections, name='mycollections'),
+
 
 ]

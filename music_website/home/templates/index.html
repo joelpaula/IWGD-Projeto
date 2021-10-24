@@ -14,7 +14,9 @@
 </div>
 
 <div class="col-8">
-<a href="mycollection">My Collections</a> | 
+{% if user.is_authenticated %}
+    <a href= "{% url 'home:mycollections' user.username %}">My Collections</a> | 
+{% endif %}
 <a href="myreviews">My Reviews</a> |
 <a href="myartist">My Artists</a>
 </div>
