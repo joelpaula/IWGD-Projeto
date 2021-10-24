@@ -6,7 +6,6 @@ from home.discogs import discog_artist, discog_record
 from home.models import Artist, Rating, Record, Like_Artist
 from home.discogs import DiscogsArtist, DiscogsRecord
 from django.contrib.auth.decorators import login_required
-
 from music_website.home.models import Collection, Collection_Record
 from .forms import NewUserForm
 from django.contrib import messages
@@ -14,6 +13,7 @@ from home.search import Search, Result
 
 # from models import Like_Artist
 # from discogs import discog_artist, discog_record
+
 
 def register(request):
     if request.method == "POST":
@@ -27,8 +27,10 @@ def register(request):
     form = NewUserForm()
     return render (request=request, template_name="registration/register.html", context={"form":form})    
 
+
 def home_index(request):
     return render(request, "index.html")
+
 
 def search(request):
     context = {}
@@ -111,29 +113,34 @@ def record(request, record_id, collection_id=None):
 def play_record(request):
     pass
 
+
 @login_required
 def add_to_collection(request):
     pass
+
 
 @login_required
 def add_to_collection_save(request):
     pass
 
+
 @login_required
 def add_ratreview(request):
     pass
+
 
 @login_required
 def add_ratreview_save(request):
     pass
 
 
-
-
-
-def collections(request, user_id):
+def collections(request):
     pass
 
 
-def mycollection(request, user_id, collection_id):
+def mycollection(request, collection_id):
     pass
+
+
+
+
