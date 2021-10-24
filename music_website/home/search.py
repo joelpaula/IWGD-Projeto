@@ -1,9 +1,7 @@
 from typing import List
 import Levenshtein as lev
-from django.core.checks.messages import Debug
 import home.discogs as discogs
 from home.models import Artist, Record
-from home.discogs import DiscogsRecord
 
 
 class Result:
@@ -18,6 +16,14 @@ class Result:
         self.type_ = type_
         self.specifics = {}
         self.matching = 0
+        self.link_to = ""
+    
+    @property
+    def link_to_id(self):
+        if self.id != 0:
+            return self.id
+        else:
+            return self.discogs_id
 
     def __str__(self) -> str:
         return f"[{self.discogs_id}] {self.title}"
@@ -43,13 +49,17 @@ class Search:
                 try:
                     art: Artist = Artist.objects.get(discogs_artist_id=result.discogs_id)
                     result.id = art.pk
+                    result.link_to = "artist"
                 except (KeyError, Artist.DoesNotExist):
+                    result.link_to = "discogs_save_artist"
                     continue
             else:
                 try:
                     rec: Record = Record.objects.get(discogs_release_id=result.discogs_id)
                     result.id = rec.pk
+                    result.link_to = "record"
                 except (KeyError, Record.DoesNotExist):
+                    result.link_to = "discogs_save_record"
                     continue
                 
         return
