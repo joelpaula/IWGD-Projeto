@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from home.discogs import discog_artist, discog_record
 from home.models import Artist, Rating, Record, Like_Artist
 from home.discogs import DiscogsArtist, DiscogsRecord
 from django.contrib.auth.decorators import login_required
-from music_website.home.models import Collection, Collection_Record
+
+from home.models import Collection, Collection_Record
 from .forms import NewUserForm
 from django.contrib import messages
 from home.search import Search, Result
@@ -40,6 +40,11 @@ def search(request):
         context["results"] = res
     return render(request, "search.html", context=context)
 
+def artist_discogs_save(request, discogs_id):
+    print(f"Saving discogs artist {discogs_id} to database...")
+    
+    print(f"Redirecting to proper artist page")
+    return render(request, "search.html", context=context)
 
 def search_artist(request, collection_id = None):
     pass
