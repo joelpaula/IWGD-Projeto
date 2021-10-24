@@ -1,3 +1,4 @@
+from django import http
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
@@ -64,21 +65,25 @@ def save_like_artist(request, artist_id):
 
 
 def review(request, review_id=None):
+    # Depends on receiving 'record_id' either from the POST or the Get (url)
     rev = get_object_or_404(Rating, pk=review_id) if review_id else None
     if request.method == "POST":
         rec = get_object_or_404(Record, pk=request.POST.get("record_id"))
         if not rev:
-            rev = Rating.objects.create(user_id=request.user.id, discogs_release_id=rec,
+            rev = Rating.objects.create(user_id_id=request.user.id, record_id=rec,
                                         rating=request.POST.get("rating", None), review=request.POST.get("review", None))
+            return HttpResponseRedirect(reverse('home:review', args=(rev.pk,)))
         else:
             rev.rating = request.POST.get("rating", None)
             rev.review = request.POST.get("review", None)
     else:
-        rec = get_object_or_404(Record, pk=request.GET.get("record_id"))
+        rec = get_object_or_404(Record, pk=request.GET.get("record_id", rev.record_id.id))
+    tracks = discogs.get_record_master_by_id(rec.discogs_release_id).tracklist
 
     context = {
         "review": rev,
-        "record": rec
+        "record": rec,
+        "tracks": tracks,
     }
     return render(request, "review.html", context=context)
 

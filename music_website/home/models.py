@@ -52,7 +52,7 @@ class Collection_Record(models.Model):
 
 
 class Rating(models.Model):
-    """links a user to a rating/review of a specif record | id; user_id(FK PK); discogs_release_id(FK PK); rating; review"""
+    """links a user to a rating/review of a specif record | id; user_id(FK PK); record_id(FK PK); rating; review"""
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=0) # user_id FK PK
     record_id = models.ForeignKey(Record, on_delete=models.CASCADE, default=0) # PK FK
     rating = models.IntegerField(validators=[MinValueValidator(0, message="Rating mínimo é 0"), MaxValueValidator(5, message="Rating máximo é 5")])
