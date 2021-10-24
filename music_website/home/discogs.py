@@ -74,7 +74,9 @@ def search_records(query: str) -> List[DiscogsRecord]:
     response = requests.request("GET", url, headers=_headers, params=payload)
     #res= response.json()
     try:
-        for result in response.json()["results"][0:10]:
+        for result in response.json()["results"]:
+            if any(r.discogs_master_id == result["master_id"] for r in res):
+                continue
             record = DiscogsRecord(result["title"], result["master_id"], result["cover_image"], result["year"])
             res.append(record)
     finally:
