@@ -31,7 +31,7 @@
       {{ result.specifics.bio }}
       {% endif %}
       </p>
-      <a href="{% if result.type_ == Result.RECORD %}{% url 'home:record' result.id %}{% else %}{% url 'home:artist' result.id %}{% endif %}" class="btn btn-primary">Go to </a>
+      <a href="{% if result.type_ == "Record" %}{% url 'home:record' result.id %}{% else %}{% url 'home:artist' result.id %}{% endif %}" class="btn btn-primary">Go to </a>
     </div>
   </div>
   {% cycle '' '</div>'%}
