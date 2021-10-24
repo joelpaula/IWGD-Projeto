@@ -53,7 +53,7 @@ def discogs_save_record(request, discogs_master_id):
     return HttpResponseRedirect(reverse('home:record', args=(record_id,)))
 
 
-def search_artist(request, collection_id = None):
+def search_artist(request, collection_id=None):
     pass
     # return d_artist
 
@@ -61,7 +61,8 @@ def search_artist(request, collection_id = None):
 @login_required
 def save_like_artist(request, artist_id):
     try:
-        Like_Artist.objects.create(user_id_id = request.user.id, artist_id_id = artist_id, like=True)
+        Like_Artist.objects.create(
+            user_id_id=request.user.id, artist_id_id=artist_id, like=True)
     finally:
         return HttpResponseRedirect(reverse('home:artist', args=(artist_id,)))
 
@@ -80,10 +81,10 @@ def artist(request, artist_id):
         like = Like_Artist.objects.filter(user_id=request.user.id).count() > 0
 
     artist = Artist.objects.get(id=artist_id)
-    
+
     context = {'like': like, 'artist': artist}
     template = "artist.html"
-    
+
     return render(request, template, context)
 
 
@@ -95,18 +96,20 @@ def record(request, record_id, collection_id=None):
             collection_to_add_to = collection_id
         try:
             user_rating = Rating.objects.get(
-                user_id=request.user.id, record_id_id=record_id).rating  
+                user_id=request.user.id, record_id_id=record_id).rating
         except:
             user_rating = None
         try:
-            record_found_in = Collection_Record.objects.filter(record_id_id=record_id, collection_id__in = Collection.objects.filter(
+            record_found_in = Collection_Record.objects.filter(record_id_id=record_id, collection_id__in=Collection.objects.filter(
                 user_id=request.user.id))  # lista de nomes de coleções do user onde o record está    # TODO: testar
         except:
             record_found_in = []
 
     collection_to_add_to = collection_id
-    record = Record.objects.get(id=record_id) # obtém objecto record
-    tracks = discogs.get_record_master_by_id(record.discogs_release_id).tracklist
+    record = Record.objects.get(id=record_id)  # obtém objecto record
+    discogs_record = discogs.get_record_master_by_id(record.discogs_release_id)
+    tracks = discogs_record.tracklist
+    videos = discogs_record.videos
 
     votes_count = Rating.objects.filter(record_id=record_id).count()
     rating_sums = 0
@@ -115,18 +118,19 @@ def record(request, record_id, collection_id=None):
     for item in Rating.objects.filter(record_id=record_id):
         rating_sums += item.rating
         i += 1
-    if i>0: 
+    if i > 0:
         avg_rating = rating_sums / i    # TODO: simplificar
-    
-    context = {'collection_to_add_to': collection_to_add_to, 
-        'user_rating': user_rating, 
-        'record_found_in': record_found_in, 
-        'record': record, 
-        'tracks': tracks,
-        'votes_count': votes_count, 
-        'avg_rating': avg_rating}
+
+    context = {'collection_to_add_to': collection_to_add_to,
+               'user_rating': user_rating,
+               'record_found_in': record_found_in,
+               'record': record,
+               'tracks': tracks,
+               'videos': videos,
+               'votes_count': votes_count,
+               'avg_rating': avg_rating}
     template = 'record.html'
-    
+
     return render(request, template_name=template, context=context)
 
 
