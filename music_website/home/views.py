@@ -13,6 +13,7 @@ from django.contrib import messages
 from home.search import Search
 from django.urls import reverse
 from home import discogs2db
+from django.utils import timezone
 from django.db.models import Avg
 
 
@@ -179,6 +180,35 @@ def single_collection(request):
     pass
 
 
-def mycollections(request, username):
+def mycollections(request, username, must_login=False):
     collections_list = Collection.objects.filter(user_id=request.user.id)
     return render(request, 'mycollections.html', {'collections_list': collections_list})
+
+
+def new_collection_form(request, username):
+    must_login = False
+    if request.user.is_authenticated:
+        return render(request, "create_collection.html")
+    else:
+        must_login = True
+        #return HttpResponse("must_login = True")
+        return HttpResponseRedirect(reverse('home:mycollections', args=(must_login,)))
+
+
+def save_new_collection(request, username):
+   
+    new_collection = None
+    try:
+        new_collection = Collection(user_id = request.user, name=request.POST['collection_name'], creation_date=timezone.now())
+        if not new_collection.name:
+            #return HttpResponse("if not new_collection.name:")
+            return render(request, 'create_collection.html', {'error_message': 'Por favor, atribua um nome à nova coleção.'})
+    except(KeyError):
+        #return HttpResponse("except(KeyError):")
+        return HttpResponseRedirect(reverse("home:create_collection"))
+    else:
+        new_collection.save()
+        #return HttpResponse("new_collection.save():")
+        return HttpResponseRedirect(reverse('home:mycollections'))    
+  
+

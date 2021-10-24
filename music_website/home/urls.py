@@ -17,4 +17,8 @@ urlpatterns = [
     path('review/<int:review_id>', views.review, name='review'),
     path('reviews', views.reviews, name='reviews'),
     path('mycollections/<str:username>', views.mycollections, name='mycollections'),
+    path('mycollections/<str:username>/new_collection', views.new_collection_form, name='new_collection_form'),
+    path('mycollections/<str:username>/save_collection', views.save_new_collection, name='save_new_collection'),
+
 ]
+
