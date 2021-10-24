@@ -43,7 +43,7 @@
 {% endif %}
 <br>
 
-{% for record in artist_releases %}
+{% for record in artist.record_set.all %}
     <li>
         <p>
             {{ record.title }} | {{ record.year }} 

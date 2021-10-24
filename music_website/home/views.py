@@ -79,9 +79,8 @@ def artist(request, artist_id):
         like = Like_Artist.objects.filter(user_id=request.user.id).count() > 0 #TODO: verificar atributo
 
     artist = Artist.objects.get(id=artist_id)  # obtém objecto artista
-    artist_releases = Record.objects.filter(artist_id=artist_id) # obtém listagem de objectos record pertencentes a artista 
     
-    context = {'like': like, 'artist': artist, 'artist_releases': artist_releases}
+    context = {'like': like, 'artist': artist}
     template = "artist.html"
     
     return render(request, template, context)
