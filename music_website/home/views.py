@@ -14,6 +14,7 @@ from home.search import Search, Result
 # from models import Like_Artist
 # from discogs import discog_artist, discog_record
 
+
 def register(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
@@ -26,8 +27,10 @@ def register(request):
     form = NewUserForm()
     return render (request=request, template_name="registration/register.html", context={"form":form})    
 
+
 def home_index(request):
     return render(request, "index.html")
+
 
 def search(request):
     context = {}
@@ -115,29 +118,34 @@ def record(request, record_id, collection_id=None):
 def play_record(request):
     pass
 
+
 @login_required
 def add_to_collection(request):
     pass
+
 
 @login_required
 def add_to_collection_save(request):
     pass
 
+
 @login_required
 def add_ratreview(request):
     pass
+
 
 @login_required
 def add_ratreview_save(request):
     pass
 
 
-
-
-
-def collections(request, user_id):
+def collections(request):
     pass
 
 
-def mycollection(request, user_id, collection_id):
+def mycollection(request, collection_id):
     pass
+
+
+
+
