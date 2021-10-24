@@ -14,5 +14,6 @@ urlpatterns = [
     path('search', views.search, name="search"),
     path('artist/<int:artist_id>', views.artist, name='artist'),
     path('record/<int:record_id>', views.record, name='record'),
+    path('artist/<int:artist_id>/like_artist', views.save_like_artist, name='like_artist')
 
 ]
