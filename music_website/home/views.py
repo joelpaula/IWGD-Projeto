@@ -4,18 +4,14 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from home.models import Artist, Rating, Record, Like_Artist, Collection, Collection_Record
-from home.discogs import DiscogsArtist, DiscogsRecord
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from home.models import Collection, Collection_Record
 from home import discogs
 from .forms import NewUserForm
 from django.contrib import messages
-from home.search import Search, Result
+from home.search import Search
 from django.urls import reverse
-
-# from models import Like_Artist
-# from discogs import discog_artist, discog_record
+from home import discogs2db
 
 
 def register(request):
@@ -45,28 +41,16 @@ def search(request):
     return render(request, "search.html", context=context)
 
 
-def artist_discogs_save(request, discogs_id):
+def discogs_save_artist(request, discogs_id):
     print(f"Saving discogs artist {discogs_id} to database...")
-    try:
-        artist = discogs.get_artist_by_id(artist_id=discogs_id)
-    except:
-        return HttpResponseNotFound("<h1>Artist not found</h1>")
-    if Artist.objects.filter(discogs_artist_id=discogs_id).count() > 0:
-        db_art = Artist.objects.get(discogs_artist_id=discogs_id)
-        return HttpResponseRedirect(reverse('home:artist', args=(db_art.pk,)))
-    else:
-        db_art = Artist(discogs_artist_id=discogs_id, name=artist.title, bio=artist.bio, picture_url=artist.cover_image)
-        db_art.save()
-        print(f"Redirecting to proper artist page")
-        return HttpResponseRedirect(reverse('home:artist', args=(db_art.pk,)))
+    artist_id = discogs2db.save_artist_to_db(discogs_id)
+    return HttpResponseRedirect(reverse('home:artist', args=(artist_id,)))
 
 
 def discogs_save_record(request, discogs_master_id):
     print(f"Saving discogs record {discogs_master_id} to database...")
-
-
-    print(f"Redirecting to proper record page")
-    return render(request, "search.html")
+    record_id = discogs2db.save_record_to_db(discogs_master_id)
+    return HttpResponseRedirect(reverse('home:record', args=(record_id,)))
 
 
 def search_artist(request, collection_id = None):
@@ -92,7 +76,7 @@ def artist(request, artist_id):
 
     like = False
     if request.user.is_authenticated:
-        like = Like_Artist.objects.get(user_id=request.user.id).like #TODO: verificar atributo
+        like = Like_Artist.objects.filter(user_id=request.user.id).count() > 0 #TODO: verificar atributo
 
     artist = Artist.objects.get(id=artist_id)  # obtém objecto artista
     artist_releases = Record.objects.filter(artist_id=artist_id) # obtém listagem de objectos record pertencentes a artista 

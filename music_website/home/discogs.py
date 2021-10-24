@@ -102,7 +102,7 @@ def get_record_master_by_id(master_record_id, include_tracklist = True) -> Disco
         cover_image=rec["images"][0]["uri"],
         year=rec["year"])
     art = rec["artists"][0]
-    res.artist = DiscogsArtist(art["name"], art["id"], art["thumbnail_url"])
+    res.artist = DiscogsArtist(art["name"], art["id"], art.get("thumbnail_url", ""))
     if include_tracklist:
         for track in rec["tracklist"]:
             res.tracklist.append(DiscogsTrack(track["title"], track["position"], track["duration"]))
