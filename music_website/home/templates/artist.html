@@ -30,7 +30,14 @@
     </span>
 </button>
 -->
+
+
 <h1> {{ artist.name }} </h1>
+<img src="{{ artist.picture_url }}" class="card-img-top" alt="{{ record.title }} cover image">
+<hr>
+<h3> Biography: </h3>
+<h7> {{ artist.bio }} </h7>
+
 <br>
 
 {% if like %}
@@ -42,6 +49,8 @@
     </a>
 {% endif %}
 <br>
+<hr>
+<h3> Records: </h3>
 
 {% for record in artist.record_set.all %}
     <li>
@@ -51,6 +60,17 @@
     </li>
 
 {% endfor %}
+
+
+<div>
+{% for record in artist.record_set.all %}
+    <div class="card col-6 mb-2">
+        <img src="{{ record.cover_url }}" class="card-img-top" alt="{{ record.title }} cover image">
+        <h5 class="card-title">{{ record.title }}</h5>
+    </div>
+    {% endfor %}
+</div>
+
 <!--
 TODO: place somewhere {{ artist.picture_url }}
 TODO: links para records

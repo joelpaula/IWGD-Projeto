@@ -1,6 +1,7 @@
 {% extends './base.html' %}
 {% block content %}
 <h1>{{record.title}}</h1>
+<a href="{% url 'home:review' %}?record_id={{record.id}}">Review this record!</a>
 <h2>Collection Name</h2>
 {{ record.artist_id.name }}
 <div>

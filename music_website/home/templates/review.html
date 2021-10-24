@@ -1,0 +1,70 @@
+{% extends './base.html' %}
+{% block content %}
+<h1>Review</h1>
+
+<div class="row g-0">
+  <div class="card border-info  col-4 mb-2">
+    <img src="{{ record.cover_url }}" class="card-img-top" alt="{{ record.title }} cover image">
+    <div class="card-body">
+      <h5 class="card-title">{{ record.title }}</h5>
+      <p class="card-text" >
+      {{ record.year }}
+      </p>
+    </div>
+  </div>
+  <div class="col p-2 m-2 g-2">
+    <div class="card mb-3">
+      <div class="row g-0">
+        <div class="col-md-8">
+          <div class="card-body">
+            <h6 class="card-title">{{ record.artist_id.name }}</h6>
+            <p class="card-text"><span class="badge rounded-pill bg-secondary">artist</span></p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <img src="{{ record.artist_id.picture_url }}" class="card-img-top" alt="{{ record.artist_id.name }} cover image">
+        </div>
+      </div> 
+    </div>
+    <div class="card">
+      <div class="card-header">
+        Tracks
+      </div>
+      <ul class="list-group list-group-flush">
+       {% for track  in tracks %}
+        <li class="list-group-item">{{track}}</li>
+        {% endfor %}
+      </ul>
+    </div>    
+    <div class="row p-2 m-2 g-2">
+      <form method="POST">
+        {% csrf_token %}
+        <div>
+          <input type="radio" class="btn-check" name="rating" id="option1" autocomplete="off" value="1" {% if review.rating == 1 %} checked {% endif %}>
+          <label class="btn btn-warning stars" for="option1">1</label>
+
+          <input type="radio" class="btn-check" name="rating" id="option2" autocomplete="off" value="2" {% if review.rating == 2 %} checked {% endif %}>
+          <label class="btn btn-warning stars" for="option2">2</label>
+
+          <input type="radio" class="btn-check" name="rating" id="option3" autocomplete="off" value="3" {% if review.rating == 3 %} checked {% endif %}>
+          <label class="btn btn-warning stars" for="option3">3</label>
+
+          <input type="radio" class="btn-check" name="rating" id="option4" autocomplete="off" value="4" {% if review.rating == 4 %} checked {% endif %}>
+          <label class="btn btn-warning stars" for="option4">4</label>
+
+          <input type="radio" class="btn-check" name="rating" id="option5" autocomplete="off" value="5" {% if review.rating == 5 %} checked {% endif %}>
+          <label class="btn btn-warning stars" for="option5">5</label>
+        </div>
+        <div class="mb-2 mt-2">
+          <label for="review" class="form-label">Review:</label>
+          <textarea class="form-control" id="review" name="review" rows="4">{{review.review}}</textarea>
+        </div>
+        <input type="hidden" id="record_id" name="record_id" value="{{record.id}}">
+        <button type="submit" class="btn btn-primary float-end">Submit</button>
+      </form>
+    </div> 
+  </div>
+</div>
+
+
+{% endblock %}
