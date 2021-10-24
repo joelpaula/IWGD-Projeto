@@ -1,5 +1,7 @@
+
 {% extends './base.html' %}
 {% block content %}
+<!--
 <script>
     const button = document.querySelector('.btn')
     button.addEventListener('click', () => {
@@ -27,5 +29,32 @@
         Like
     </span>
 </button>
+-->
+<h1> {{ artist.name }} </h1>
+<br>
 
+{% if like %}
+    <p>Already liked this artist</p>
+{% else %}
+    <p>Not yet rated</p>
+    <a href="/home/{{ artist.id }}/like_artist">
+        Like this artist!
+    </a>
+{% endif %}
+<br>
+
+{% for record in artist_releases %}
+    <li>
+        <p>
+            {{ record.title }} | {{ record.year }} 
+        </p>
+    </li>
+
+{% endfor %}
+<!--
+TODO: place somewhere {{ artist.picture_url }}
+TODO: links para records
+TODO: imagens de cada record
+
+-->
 {% endblock %}

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from home.models import Artist, Rating, Record, Like_Artist
+from home.models import Artist, Rating, Record, Like_Artist, Collection, Collection_Record
 from home.discogs import DiscogsArtist, DiscogsRecord
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -12,6 +12,7 @@ from home import discogs
 from .forms import NewUserForm
 from django.contrib import messages
 from home.search import Search, Result
+from django.urls import reverse
 
 # from models import Like_Artist
 # from discogs import discog_artist, discog_record
@@ -44,7 +45,7 @@ def search(request):
     return render(request, "search.html", context=context)
 
 
-def discogs_save_artist(request, discogs_id):
+def artist_discogs_save(request, discogs_id):
     print(f"Saving discogs artist {discogs_id} to database...")
     try:
         artist = discogs.get_artist_by_id(artist_id=discogs_id)
@@ -67,15 +68,17 @@ def discogs_save_record(request, discogs_master_id):
     print(f"Redirecting to proper record page")
     return render(request, "search.html")
 
-def search_artist(request, collection_id=None):
+
+def search_artist(request, collection_id = None):
     pass
     # return d_artist
 
 
-def save_like_artist(request, artist_id, like):
-    if like == False:
-        # get POST do like
-        pass
+@login_required
+def save_like_artist(request, artist_id):
+    Like_Artist.objects.create(user_id = request.user.id, artist_id = artist_id, like=True)
+    
+    return HttpResponseRedirect(reverse('artist.html', args=(artist_id)))
 
 
 def get_artist(request, artist_id):
@@ -89,21 +92,14 @@ def artist(request, artist_id):
 
     like = False
     if request.user.is_authenticated:
-        like = Like_Artist.objects.get(
-            user_id=request.user.id).like  # TODO: verificar atributo
+        like = Like_Artist.objects.get(user_id=request.user.id).like #TODO: verificar atributo
 
-    # para mostrar nome de artista
-    artist_name = Artist.objects.get(artist_id=artist_id).name
-    # para mostrar bio de artista
-    artist_bio = Artist.objects.get(artist_id=artist_id).bio
-    # para mostrar foto do artista
-    artist_pic = Artist.objects.get(artist_id=artist_id).picture_url
-    # artist_releases = d_artist.releases # para mostrar lista de albums do artista # TODO: artist_releases
-
-    context = {'like': like, 'artist_name': artist_name,
-               'artist_bio': artist_bio, 'artist_pic': artist_pic}
-    template = 'home/artist.html'
-
+    artist = Artist.objects.get(id=artist_id)  # obtém objecto artista
+    artist_releases = Record.objects.filter(artist_id=artist_id) # obtém listagem de objectos record pertencentes a artista 
+    
+    context = {'like': like, 'artist': artist, 'artist_releases': artist_releases}
+    template = "artist.html"
+    
     return render(request, template, context)
 
 
@@ -123,10 +119,9 @@ def record(request, record_id, collection_id=None):
             record_found_in = []
 
     collection_to_add_to = collection_id
-    artist_name = Artist.objects.get(
-        id=Record.objects.get(id=record_id).artist_id).name
-    record_name = Record.objects.get(id=record_id).title
-    release_year = Record.objects.get(id=record_id).year
+    artist = Artist.objects.get(id=Record.objects.get(id=record_id)).artist_id # obtém objecto artist
+    record = Record.objects.get(id=record_id) # obtém objecto record
+    #release_year = Record.objects.get(id=record_id).year
     # track_list = d_record.tracklist # lista de faixas do album    # TODO: get track_list
     # ??track_times = d_record.tracktimes # tempos de cada faixa do album   # TODO: get tracktimes
     # contagem de pares de (record_id=rating_id, user_id) em Rating
@@ -137,13 +132,12 @@ def record(request, record_id, collection_id=None):
         rating_sums += rating
         i += 1
     avg_rating = rating_sums / i    # TODO: simplificar
-    record_cover = Record.objects.get(record_id=record_id).cover_url
-
-    context = {'collection_to_add_to': collection_to_add_to, 'user_rating': user_rating, 'record_found_in': record_found_in, 'collection_to_add_to': collection_to_add_to,
-               'artist_name': artist_name, 'record_name': record_name, 'release_year': release_year, 'votes_count': votes_count, 'avg_rating': avg_rating, 'record_cover': record_cover}
-    template = 'home/record.html'
-
-    return render(request, template, context)
+    #record_cover = Record.objects.get(record_id=record_id).cover_url
+    
+    context = {'collection_to_add_to': collection_to_add_to, 'user_rating': user_rating, 'record_found_in': record_found_in, 'collection_to_add_to': collection_to_add_to, 'artist': artist, 'record': record, 'votes_count': votes_count, 'avg_rating': avg_rating}
+    template = 'record.html'
+    
+    return render(request, template_name=template, context=context)
 
 
 def play_record(request):
