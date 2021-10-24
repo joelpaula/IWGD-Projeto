@@ -5,7 +5,7 @@
 
   {% if form.errors %}
   <div class="alert alert-primary d-flex align-items-center" role="alert">
-    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+    <i class="bi bi-info-square flex-shrink-0 me-2"></i>
     <div>
     Your username and password didn't match. Please try again.
     </div>
@@ -15,7 +15,7 @@
 
   {% if next %}
   <div class="alert alert-primary d-flex align-items-center alert-dismissible fade show" role="alert">
-    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+    <i class="bi bi-info-square flex-shrink-0 me-2"></i>
     <div>
     {% if user.is_authenticated %}
       Your account doesn't have access to this page. To proceed,

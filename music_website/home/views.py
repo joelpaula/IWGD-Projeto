@@ -1,5 +1,5 @@
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -12,6 +12,7 @@ from django.contrib import messages
 from home.search import Search
 from django.urls import reverse
 from home import discogs2db
+from django.db.models import Avg
 
 
 def register(request):
@@ -53,11 +54,6 @@ def discogs_save_record(request, discogs_master_id):
     return HttpResponseRedirect(reverse('home:record', args=(record_id,)))
 
 
-def search_artist(request, collection_id=None):
-    pass
-    # return d_artist
-
-
 @login_required
 def save_like_artist(request, artist_id):
     try:
@@ -67,8 +63,24 @@ def save_like_artist(request, artist_id):
         return HttpResponseRedirect(reverse('home:artist', args=(artist_id,)))
 
 
-def get_artist(request, artist_id):
-    pass
+def review(request, review_id=None):
+    rev = get_object_or_404(Rating, pk=review_id) if review_id else None
+    if request.method == "POST":
+        rec = get_object_or_404(Record, pk=request.POST.get("record_id"))
+        if not rev:
+            rev = Rating.objects.create(user_id=request.user.id, discogs_release_id=rec,
+                                        rating=request.POST.get("rating", None), review=request.POST.get("review", None))
+        else:
+            rev.rating = request.POST.get("rating", None)
+            rev.review = request.POST.get("review", None)
+    else:
+        rec = get_object_or_404(Record, pk=request.GET.get("record_id"))
+
+    context = {
+        "review": rev,
+        "record": rec
+    }
+    return render(request, "review.html", context=context)
 
 
 def artist(request, artist_id):
@@ -113,13 +125,7 @@ def record(request, record_id, collection_id=None):
 
     votes_count = Rating.objects.filter(record_id=record_id).count()
     rating_sums = 0
-    avg_rating = None
-    i = 0
-    for item in Rating.objects.filter(record_id=record_id):
-        rating_sums += item.rating
-        i += 1
-    if i > 0:
-        avg_rating = rating_sums / i    # TODO: simplificar
+    avg_rating = Rating.objects.filter(record_id=record_id).aggregate(Avg('rating'))
 
     context = {'collection_to_add_to': collection_to_add_to,
                'user_rating': user_rating,
