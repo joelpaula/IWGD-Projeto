@@ -13,14 +13,12 @@
     <img src="" class="" alt="Main Picture" width="600" height="750">
 </div>
 
+{% if user.is_authenticated %}
 <div class="col-8">
-{% if user.is_authenticated %}
     <a href= "{% url 'home:mycollections' user.username %}">My Collections</a> | 
-{% endif %}
-<a href="{% url 'home:reviews' %}">My Reviews</a> |
-<a href="myartist">My Artists</a>
+    <a href="{% url 'home:reviews' %}">My Reviews</a> |
+    <a href="myartist">My Artists</a>
 </div>
-{% if user.is_authenticated %}
- Autenticado!
 {% endif %}
+
 {% endblock %}
