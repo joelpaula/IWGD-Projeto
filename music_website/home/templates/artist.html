@@ -30,6 +30,16 @@
     </span>
 </button>
 -->
+
+{% for artist in DiscogsArtist.all %}
+    <div>
+        <img src="{{ artist.picture_url }}" class="card-img-top" alt="{{ record.title }} cover image">
+        <h5>{{ record.bio }}</h5>
+    </div>
+    {% endfor %}
+</div>
+
+
 <h1> {{ artist.name }} </h1>
 <br>
 
@@ -43,6 +53,7 @@
 {% endif %}
 <br>
 
+
 {% for record in artist.record_set.all %}
     <li>
         <p>
@@ -51,6 +62,17 @@
     </li>
 
 {% endfor %}
+
+
+<div>
+{% for record in artist.record_set.all %}
+    <div class="card col-6 mb-2">
+        <img src="{{ record.cover_url }}" class="card-img-top" alt="{{ record.title }} cover image">
+        <h5 class="card-title">{{ record.title }}</h5>
+    </div>
+    {% endfor %}
+</div>
+
 <!--
 TODO: place somewhere {{ artist.picture_url }}
 TODO: links para records
