@@ -31,16 +31,11 @@
 </button>
 -->
 
-{% for artist in DiscogsArtist.all %}
-    <div>
-        <img src="{{ artist.picture_url }}" class="card-img-top" alt="{{ record.title }} cover image">
-        <h5>{{ record.bio }}</h5>
-    </div>
-    {% endfor %}
-</div>
-
 
 <h1> {{ artist.name }} </h1>
+<h1> {{ artist.picture_url }} </h1>
+<h7> {{ artist.bio }} </h7>
+
 <br>
 
 {% if like %}
