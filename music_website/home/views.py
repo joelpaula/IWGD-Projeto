@@ -89,6 +89,12 @@ def review(request, review_id=None):
     return render(request, "review.html", context=context)
 
 
+def reviews(request):
+    res = Rating.objects.filter(user_id_id=request.user.id)
+    context={"reviews": res,}
+    return render(request, "reviews.html", context=context)
+
+
 def artist(request, artist_id):
     """IN: d_artist (class discog_artist), collection_id (int) |
     processa dados para página do Artista;
