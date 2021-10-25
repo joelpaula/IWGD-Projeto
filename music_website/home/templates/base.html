@@ -50,7 +50,11 @@
               <a class="nav-link" aria-current="page" href="{% url 'home:home_index' %}">Home</a>
               <a class="nav-link" href="{% url 'home:mycollections' user.username %}">My Collections</a>
               <a class="nav-link" href="{% url 'home:reviews' %}">My Reviews</a>
-              <a class="nav-link disabled">My Artists</a></div>
+              <a class="nav-link disabled">My Artists</a>
+              {% if user.is_superuser %}
+              <a class="nav-link" href="{% url 'home:staff_picks' %}">Staff picks</a>
+              {% endif %}
+            </div>
           </div>
         </div>
       </nav>
@@ -84,6 +88,6 @@
         </p>
     </div></div>
     </footer>
-    
+
   </body>
 </html>

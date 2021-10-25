@@ -1,0 +1,47 @@
+{% extends './base.html' %}
+{% block content %}
+<h1>Staff Picks</h1>
+
+{% for pick in page_obj %}
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{pick.record.cover_url}}" class="img-fluid rounded-start" alt="{{pick.record.title}} record cover">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body position-relative">
+        <a href="{% url 'home:staff_pick_delete' pick.id %}" class="btn btn-sm bg-danger text-light position-absolute top-0 end-0 mt-2 me-2">delete</a>
+        <span class="badge bg-light text-dark">{{pick.record.artist_id.name}}</span>
+        <h5 class="card-title"><a href="{% url 'home:record' pick.record.id %}">{{pick.record.title}}</a></h5>
+        <span class="badge rounded-pill bg-secondary me-2" style="float: left">{{pick.record.year}}</span>
+        <p class="card-text">{{pick.title}}</p>
+        <p class="card-text">{{pick.recommendations}}</p>
+        <p class="card-text">
+          <small class="text-muted fw-light lh-sm" style="font-size: xx-small;"><em>{{ pick.creation_date|date:"SHORT_DATETIME_FORMAT" }} by {{ pick.user.username }}</em></small>
+          <a href="{% url 'home:staff_pick' pick.id %}" style="float:right">edit</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<nav aria-label="navigation on pages of staff picks">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            {% if page_obj.number != 1 %}<li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>{% endif %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+        {% endif %}
+
+        <li class="page-item active" aria-current="page">
+            <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        </li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a></li>
+            {% if page_obj.number != page_obj.paginator.num_pages %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>{% endif %}
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}
