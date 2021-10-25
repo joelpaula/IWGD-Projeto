@@ -6,7 +6,7 @@
   <div class="card border-info  col-4 mb-2">
     <img src="{{ record.cover_url }}" class="card-img-top" alt="{{ record.title }} cover image">
     <div class="card-body">
-      <h5 class="card-title">{{ record.title }}</h5>
+      <h5 class="card-title"><a href="{% url 'home:record' record.id %}">{{ record.title }}</a></h5>
       <p class="card-text" >
       {{ record.year }}
       </p>

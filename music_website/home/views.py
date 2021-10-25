@@ -65,6 +65,14 @@ def save_like_artist(request, artist_id):
         return HttpResponseRedirect(reverse('home:artist', args=(artist_id,)))
 
 
+@login_required
+def save_unlike_artist(request, artist_id):
+    try:
+        Like_Artist.objects.filter(
+            user_id_id=request.user.id, artist_id_id=artist_id, like=True).delete()
+    finally:
+        return HttpResponseRedirect(reverse('home:artist', args=(artist_id,)))
+
 def review(request, review_id=None):
     # Depends on receiving 'record_id' either from the POST or the Get (url)
     rev = get_object_or_404(Rating, pk=review_id) if review_id else None
@@ -75,10 +83,11 @@ def review(request, review_id=None):
                                         rating=request.POST.get("rating", None), review=request.POST.get("review", None))
             return HttpResponseRedirect(reverse('home:review', args=(rev.pk,)))
         else:
-            rev.rating = request.POST.get("rating", None)
+            rev.rating = int(request.POST.get("rating", None))
             rev.review = request.POST.get("review", None)
     else:
-        rec = get_object_or_404(Record, pk=request.GET.get("record_id", rev.record_id.id))
+        record_id = rev.record_id.id if rev else request.GET.get("record_id")
+        rec = get_object_or_404(Record, pk=record_id)
     tracks = discogs.get_record_master_by_id(rec.discogs_release_id).tracklist
 
     context = {
@@ -96,15 +105,11 @@ def reviews(request):
 
 
 def artist(request, artist_id):
-    """IN: d_artist (class discog_artist), collection_id (int) |
-    processa dados para página do Artista;
-    se user autenticado, busca info do like"""
-
     like = False
     if request.user.is_authenticated:
-        like = Like_Artist.objects.filter(user_id=request.user.id).count() > 0
+        like = Like_Artist.objects.filter(user_id=request.user.id, artist_id_id=artist_id).count() > 0
 
-    artist = Artist.objects.get(id=artist_id)
+    artist = get_object_or_404(Artist, id=artist_id)
 
     context = {'like': like, 'artist': artist}
     template = "artist.html"
@@ -122,7 +127,7 @@ def record(request, record_id, collection_id=None):
             user_rating = Rating.objects.get(
                 user_id=request.user.id, record_id_id=record_id).rating
         except:
-            user_rating = None
+            user_rating = 0
         try:
             record_found_in = Collection_Record.objects.filter(record_id_id=record_id, collection_id__in=Collection.objects.filter(
                 user_id=request.user.id))  # lista de nomes de coleções do user onde o record está    # TODO: testar
@@ -136,8 +141,9 @@ def record(request, record_id, collection_id=None):
     videos = discogs_record.videos
 
     votes_count = Rating.objects.filter(record_id=record_id).count()
-    rating_sums = 0
-    avg_rating = Rating.objects.filter(record_id=record_id).aggregate(Avg('rating'))
+    avg_rating = Rating.objects.filter(record_id=record_id).aggregate(avg_rating=Avg('rating'))
+    # convert to int (no half stars)
+    avg_rating = int(avg_rating["avg_rating"]) if avg_rating["avg_rating"] else 0
 
     context = {'collection_to_add_to': collection_to_add_to,
                'user_rating': user_rating,

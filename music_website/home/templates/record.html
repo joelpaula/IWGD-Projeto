@@ -2,12 +2,34 @@
 {% block content %}
 <h1>{{record.title}}</h1>
 <a href="{% url 'home:review' %}?record_id={{record.id}}">Review this record!</a>
-<h2>Collection Name</h2>
-{{ record.artist_id.name }}
+<a href="/add_to_collection/{{record.id}}">Add to your collection!</a>
+
+
+{% if record.collection_to_add != None %}
+    <h2>Collection Name</h2>
+    {{ record.artist_id.name }}
+{% endif %}
+
+
+{% with ''|center:avg_rating as range %}
+{% for _ in range %}
+    <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+{% endfor %}
+{% endwith %}
+
 <div>
     <figure>
-        <img src="" alt="Profile Picture" style="width:100%">
+        <img src="{{ record.cover_url }}" alt="Cover Picture" style="width:50%">
     </figure>
 </div>
+
+{% if tracks %}
+    <h2>Tracks</h2>
+{% endif %}
+
+{% for track in tracks %}
+    <p>{{track.position}} | {{track.title}} | {{track.duration}}</p>    
+{% endfor %}
+
 
 {% endblock %}
