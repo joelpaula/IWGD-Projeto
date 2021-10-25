@@ -40,7 +40,7 @@ class DiscogsTrack:
         self.duration = duration
 
     def __str__(self) -> str:
-        return f"{self.position} - {self.title} [{self.duration}]"
+        return f"{self.position} - {self.title} ({self.duration})"
 
     def __repr__(self) -> str:
         return self.__str__()
