@@ -39,9 +39,12 @@ def home_index(request):
     top_records = Record.objects.annotate(avg_rating=Avg('rating__rating'), review_count=Count(
         'rating')).order_by('-avg_rating', '-review_count')[:5]
 
+    top_reviews = Rating.objects.order_by('-creation_date')[:3]
+
     context = {
         "top_artists": top_artists,
         "top_records": top_records,
+        "top_reviews": top_reviews
     }
     return render(request, "index.html", context=context)
 

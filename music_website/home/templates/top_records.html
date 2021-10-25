@@ -11,15 +11,16 @@
           <h6 class="card-title m-0 lh-sm">{{record.title}}</h6>
         </a>
         <small class="card-text card-text position-absolute bottom-0 start-0 translate-middle-y ms-2 lh-sm">{{record.year}}</small>
-        <p class="card-text">
-        {% with record.avg_rating|default_if_none:0 as avg_rating %}
-        {% with ''|center:avg_rating as range %}
-        {% for _ in range %}
-            <i class="bi bi-star-fill" style="color: #fd7e14"></i>
-        {% endfor %}
-        {% endwith %}
-        {% endwith %}
-        {% if record.review_count %}<small class="text-muted lh-sm">average rating from {{record.review_count}} reviews</small>{% endif %}
+        <p class="card-text mb-1"><small class="text-muted lh-sm">{{record.artist_id.name}}</small></p>
+        <p class="card-text lh-sm mb-0">
+          {% with record.avg_rating|default_if_none:0 as avg_rating %}
+          {% with ''|center:avg_rating as range %}
+          {% for _ in range %}
+              <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+          {% endfor %}
+          {% endwith %}
+          {% endwith %}
+          {% if record.review_count %}<br><small class="text-muted fw-light lh-sm" style="font-size: xx-small;">(average rating from {{record.review_count}} reviews)</small>{% endif %}
         </p>
       </div>
     </div>

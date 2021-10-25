@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils import timezone
 
 
 class Collection(models.Model):
@@ -51,19 +52,22 @@ class Collection_Record(models.Model):
 
 
 class Rating(models.Model):
-    """links a user to a rating/review of a specif record | id; user_id(FK PK); record_id(FK PK); rating; review"""
+    """links a user to a rating/review of a specif record | id; user_id(FK PK); record_id(FK PK); rating (int [0..5]); review (text), creation_date"""
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=0) # user_id FK PK
     record_id = models.ForeignKey(Record, on_delete=models.CASCADE, default=0) # PK FK
     rating = models.IntegerField(validators=[MinValueValidator(0, message="Rating mínimo é 0"), MaxValueValidator(5, message="Rating máximo é 5")])
     review = models.TextField() # review
+    creation_date = models.DateTimeField(default=timezone.now) # rating creation date
+    
     class Meta:
         unique_together = [['user_id', 'record_id']]
 
 
 class Like_Artist(models.Model):
-    """links a user to a like option of a given artist | id; user_id(FK PK); artist_id(FK PK); like"""
+    """links a user to a like option of a given artist | id; user_id(FK PK); artist_id(FK PK); like /boolean) , creation_date"""
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=0) # user_id FK PK
     artist_id = models.ForeignKey(Artist, on_delete=models.CASCADE, default=0) # artist_id FK PK
     like = models.BooleanField() # True/false
+
     class Meta:
         unique_together = [['user_id', 'artist_id']]
