@@ -28,7 +28,11 @@
 
 
 <p>
-    <a href="{% url 'home:add_to_collection' username collection.id %}"> Adicionar um álbum à colecção
+    <a href="{% url 'home:add_to_collection' collection.id %}"> Adicionar um álbum à colecção
+</p>
+
+<p>
+    <a href="{% url 'home:remove_from_collection' collection.id %}"> Remover um álbum da colecção
 </p>
 
 

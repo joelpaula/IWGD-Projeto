@@ -21,7 +21,9 @@ urlpatterns = [
     path('mycollections/<str:username>/new_collection', views.new_collection_form, name='new_collection_form'),
     path('mycollections/<str:username>/save_collection', views.save_new_collection, name='save_new_collection'),
     path('mycollections/<str:username>/<int:collection_id>', views.single_collection, name='single_collection'),
-    path('mycollections/<str:username>/<int:collection_id>/add_new_record', views.add_to_collection, name='add_to_collection'),
-
+    path('add_to_collection/<int:record_id>', views.add_to_collection, name='add_to_collection'),
+    path('add_to_collection/<int:record_id>/save', views.add_to_collection_save, name='add_to_collection_save'),
+    path('remove_from_collection/<int:record_id>', views.remove_from_collection, name='remove_from_collection'),
+    path('remove_from_collection/<int:record_id>save', views.remove_from_collection_save, name='remove_from_collection_save'),
 ]
 
