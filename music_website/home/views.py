@@ -94,7 +94,7 @@ def review(request, review_id=None):
     rev = get_object_or_404(Rating, pk=review_id) if review_id else None
     if not rev and request.GET.get("record_id"):
         rev = Rating.objects.get(user_id_id=request.user.id, record_id_id=request.GET.get("record_id"))
-    edit_mode = False if rev and rev.user_id_id != request.user.id else True
+    edit_mode = False if rev and rev.user_id.id != request.user.id else True
     if request.method == "POST":
         rec = get_object_or_404(Record, pk=request.POST.get("record_id"))
         if not rev and Rating.objects.filter(user_id_id=request.user.id, record_id=rec).count() == 0:
@@ -306,11 +306,6 @@ def remove_from_collection_save(request, record_id):
     else:
         to_remove.delete()
         return HttpResponseRedirect(reverse('home:single_collection', args=(request.user.username, collection_id.id,))) 
-
-
-@login_required
-def add_to_collection(request, username, collection_id):
-    return HttpResponse("Add Album To Collection Page")
 
 
 def single_collection(request, username, collection_id):
