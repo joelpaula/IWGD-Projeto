@@ -4,8 +4,12 @@
 <a href="{% url 'home:review' %}?record_id={{record.id}}">Review this record!</a>
 <a href="/add_to_collection/{{record.id}}">Add to your collection!</a>
 
-<h2>Collection Name</h2>
-{{ record.artist_id.name }}
+
+{% if record.collection_to_add != None %}
+    <h2>Collection Name</h2>
+    {{ record.artist_id.name }}
+{% endif %}
+
 
 {% with ''|center:avg_rating as range %}
 {% for _ in range %}
