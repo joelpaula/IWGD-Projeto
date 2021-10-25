@@ -1,23 +1,28 @@
 {% extends './base.html' %}
+{% load static %}
 {% block content %}
-<h1Music collection</h1>
-<div>
-    Search <a href="{% url 'home:search' %}"><span class="badge rounded-pill bg-primary fg-light">here</span></a> for you favorite artist or record...
-</div>
-<div>
-    <h2>MUSIC COLLECTION</h2>
+<h1>Music collection</h1>
+
+<div class="row">
     <p class="lead">
     Descubra a plataforma que você não sabia que precisava! Faça a gestão da suas coleções e deixe reviews e likes nas músicas que desejar.
     Todas estas funcionalidades e muitas mais apenas à distância de um Registo/LogIn!
     </p>
-    <img src="" class="" alt="Main Picture" width="600" height="750">
+</div>
+
+<div class="row mb-4 mt-4">
+    <div class="col-12">
+        <a href="{% url 'home:search' %}"><span class="btn btn-primary btn-lg px-4 gap-3"> Search here</span></a> for you favorite artist or record...
+    </div>
 </div>
 
 {% if user.is_authenticated %}
-<div class="col-8">
-    <a href= "{% url 'home:mycollections' user.username %}">My Collections</a> | 
-    <a href="{% url 'home:reviews' %}">My Reviews</a> |
-    <a href="myartist">My Artists</a>
+<div class="row mb-4 mt-4">
+    <div class="col-8">
+        <a href= "{% url 'home:mycollections' user.username %}">My Collections</a> | 
+        <a href="{% url 'home:reviews' %}">My Reviews</a> |
+        <a href="myartist">My Artists</a>
+    </div>
 </div>
 {% endif %}
 
