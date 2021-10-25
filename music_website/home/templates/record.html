@@ -6,6 +6,13 @@
 
 <h2>Collection Name</h2>
 {{ record.artist_id.name }}
+
+{% with ''|center:avg_rating as range %}
+{% for _ in range %}
+    <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+{% endfor %}
+{% endwith %}
+
 <div>
     <figure>
         <img src="{{ record.cover_url }}" alt="Cover Picture" style="width:50%">

@@ -139,7 +139,7 @@ def record(request, record_id, collection_id=None):
     votes_count = Rating.objects.filter(record_id=record_id).count()
     avg_rating = Rating.objects.filter(record_id=record_id).aggregate(avg_rating=Avg('rating'))
     # convert to int (no half stars)
-    avg_rating = int(avg_rating["avg_rating"]) if avg_rating["avg_rating"] else None
+    avg_rating = int(avg_rating["avg_rating"]) if avg_rating["avg_rating"] else 0
 
     context = {'collection_to_add_to': collection_to_add_to,
                'user_rating': user_rating,
