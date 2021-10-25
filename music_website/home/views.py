@@ -186,12 +186,14 @@ def add_ratreview_save(request):
 
 def single_collection(request, username, collection_id):
     records_list = []
+    #ratings_list = []
     template = 'single_collection.html'
     collection = Collection.objects.get(pk=collection_id)
-    records = Collection_Record.objects.filter(collection_id=collection_id) # TODO: obter lista de records
-    for record in records:
+    records = Collection_Record.objects.filter(collection_id=collection_id)
+    for record in records: 
         records_list.append(Record.objects.get(pk=record.record_id.id))
-    context = {'username': username, 'collection': collection, 'records_list':records_list}
+    user_ratings = Rating.objects.filter(user_id = request.user.id)
+    context = {'username': username, 'collection': collection, 'records_list':records_list, 'user_ratings': user_ratings}
     
     return render(request, template, context)
 
@@ -212,7 +214,6 @@ def new_collection_form(request, username):
         return render(request, "create_collection.html")
     else:
         must_login = True
-        #return HttpResponse("must_login = True")
         return HttpResponseRedirect(reverse('home:mycollections', args=(must_login,)))
 
 
@@ -222,14 +223,11 @@ def save_new_collection(request, username):
     try:
         new_collection = Collection(user_id = request.user, name=request.POST['collection_name'], creation_date=timezone.now())
         if not new_collection.name:
-            #return HttpResponse("if not new_collection.name:")
             return render(request, 'create_collection.html', {'error_message': 'Por favor, atribua um nome à nova coleção.'})
     except(KeyError):
-        #return HttpResponse("except(KeyError):")
         return HttpResponseRedirect(reverse("home:create_collection"))
     else:
         new_collection.save()
-        #return HttpResponse("new_collection.save():")
-        return HttpResponseRedirect(reverse('home:mycollections'))    
+        return HttpResponseRedirect(reverse('home:mycollections', args=(username,)))    
   
 

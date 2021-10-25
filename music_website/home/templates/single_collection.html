@@ -2,7 +2,8 @@
 {% block content %}
 
 
-<h1> Colecção "{{ collection.name }}"" </h1>
+<h1> Colecção "{{ collection.name }}" </h1>
+<br>
 <p>
     Criador: {{ username }} <br>
     Data de criação: {{ collection.creation_date }}
@@ -11,11 +12,18 @@
 
 
 {% for record in records_list %}
-    <p>
-        {{ record.artist_id.name }} | {{ record.title }} | {{ record.year }} 
-    </p>
-
-
+<p>
+    <a href="{% url 'home:artist' record.artist_id.id %}">  {{ record.artist_id.name }}</a> |       
+    <a href="{% url 'home:record' record.id %}">  {{ record.title }}</a> |        
+    Ano: {{ record.year }} |
+    
+    {% for rating in user_ratings %}
+        {% if rating.record_id == record %}
+            Rating: {{ rating.rating }} |
+            <a href= "{% url 'home:review' rating.id %}"> Check Review</a>
+        {% endif %}
+    {% endfor %}    
+</p>    
 {% endfor %}
 
 
