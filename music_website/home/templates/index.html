@@ -16,14 +16,18 @@
     </div>
 </div>
 
-{% if user.is_authenticated %}
-<div class="row mb-4 mt-4">
-    <div class="col-8">
-        <a href= "{% url 'home:mycollections' user.username %}">My Collections</a> | 
-        <a href="{% url 'home:reviews' %}">My Reviews</a> |
-        <a href="myartist">My Artists</a>
+<!-- Home Lists -->
+<div class="row mb-2 mt-2">
+    <div class="col-4">
+        {% include 'top_artists.html'%}
+    </div>
+    <div class="col-4">
+        {% include 'top_records.html'%}
+    </div>
+    <div class="col-4">
+        {% include 'top_reviews.html'%}
+        <div>staff pick</div>
     </div>
 </div>
-{% endif %}
 
 {% endblock %}

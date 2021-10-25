@@ -1,0 +1,29 @@
+<h2 class="badge bg-info text-dark">latest reviews</h2>
+{% for review in top_reviews %}
+<div class="card mb-3" style="max-width: 340px;">
+  <div class="row g-0">
+    <div class="col-md-4 pb-3">
+      <img src="{{review.record_id.cover_url}}" class="img-fluid rounded-start pb-2" alt="{{review.record.title}}'s cover image">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <a class="stretched-link mt-0" href="{% url 'home:record' review.record_id.id %}">
+          <h6 class="card-title m-0 lh-sm">{{review.record_id.title}}</h6>
+        </a>
+        <small class="card-text card-text position-absolute bottom-0 start-0 translate-middle-y ms-2 lh-sm">{{review.record_id.year}}</small>
+        {% with ''|center:review.rating as range %}
+        {% for _ in range %}
+            <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+        {% endfor %}
+        {% endwith %}
+        <p class="card-text"><small class="text-muted lh-sm">{{review.record_id.artist_id.name}}</small></p>
+        <p class="card-text text-truncate overflow-hidden" style="max-height: 3em;">
+          <small class="lh-sm">{{review.review}}</small>
+        </p>
+        <p class="card-text">
+          <small class="text-muted fw-light lh-sm" style="font-size: xx-small;"><em>by {{review.user_id.username}}</em></small></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
