@@ -1,10 +1,10 @@
 body {
-    background-color: #BADFE7;
+    background-color:#fefeff;
     /* background-image: url('../votacao/images/iscte.png'); */
 }
 
 p {
-    color: green;
+    color:#495057;
 }
 
 .bd-example {
@@ -13,6 +13,7 @@ p {
     margin: 1rem -.75rem 0;
     border: solid #dee2e6;
     border-width: 1px 0 0
+    min-height: 2em;
 }
 
 .bd-example::after {
@@ -34,91 +35,3 @@ p {
 .stars {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 16 16' fill-rule='evenodd'%3E%3Cpath d='M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z'%3E%3C/path%3E%3C/svg%3E") center / contain no-repeat;
 }
-/* :root {
-    --red: rgb(209, 3, 3);
-    --white: #fff;
-    --black: #000;
-}
-.btn {
-    width: 200px; height: 88px;
-    outline: 0;
-    border: 2px solid #ccc;
-    color: #000;
-    cursor: pointer;
-    overflow: hidden;
-    position: relative;
-    display:flex;
-    justify-content: space-between;
-    box-shadow: 0px 3px 25px rgba(0, 0, 0, 0.05);
-    transition: 1.5s cubic-bezier(.21,.04,.26,.99);
-}
-.btn:hover {
-    box-shadow: 0px 3px 25px rgba(0, 0, 0, 0.2);
-    border-color: var(--red);
-}
-.btn-like {
-    padding: 1.5rem 1.5rem 1.5rem 6rem;
-    font-size: 2rem;
-    border-radius: 10px;
-    background: #fff;
-    transition: 1.5s cubic-bezier(.21,.04,.26,.99);
-}
-.btn-like.liked {
-    background: var(--red);
-    border-color: var(--red);
-} */
-/*-- Button Icon -- */
-/* .btn-icon {
-    display: inline-block;
-    width: 32px;
-    height: 36px;
-    position: absolute;
-    left: 1.5rem;
-    transition: 1s cubic-bezier(.21,.04,.26,.99);
-    transform: rotate(0deg)
-}
-.btn:hover .btn-icon {
-    color: var(--red);
-}
-.btn.liked:hover .btn-icon {
-    color: var(--black);
-}
-.liked .btn--icon-default {
-    transform: rotate(-90deg)
-}
-.btn:not(.liked).btn--icon-liked {
-    transform: rotate(-90deg)
-}
-.liked .btn--icon-default,
-.btn--icon-liked {
-    opacity: 0;
-    color: #fff;
-    position: absolute;
-}
-.btn--icon-default,
-.liked .btn--icon-liked {
-    opacity: 1;
-    left: 1.5rem;
-} */
-/*-- Button Content -- */
-/*.btn-content {
-    transition: transform 0.1s ease;
-    display: inline-block;
-    /* position: absolute;
-    right: 0; *//*
-}
-.liked .btn-content {
-    color: var(--white);
-}
-.btn:hover.liked .btn-content {
-    color: var(--black);
-}
-.btn:not(.liked) .btn-content--liked {
-    transform: translate(110px)
-}
-.btn:not(.liked) .btn-content--default {
-    transform: translate(-56px)
-}
-.liked .btn-content--default {
-    transform: translate(24px)
-} */

@@ -65,6 +65,14 @@ def save_like_artist(request, artist_id):
         return HttpResponseRedirect(reverse('home:artist', args=(artist_id,)))
 
 
+@login_required
+def save_unlike_artist(request, artist_id):
+    try:
+        Like_Artist.objects.filter(
+            user_id_id=request.user.id, artist_id_id=artist_id, like=True).delete()
+    finally:
+        return HttpResponseRedirect(reverse('home:artist', args=(artist_id,)))
+
 def review(request, review_id=None):
     # Depends on receiving 'record_id' either from the POST or the Get (url)
     rev = get_object_or_404(Rating, pk=review_id) if review_id else None
@@ -97,15 +105,11 @@ def reviews(request):
 
 
 def artist(request, artist_id):
-    """IN: d_artist (class discog_artist), collection_id (int) |
-    processa dados para página do Artista;
-    se user autenticado, busca info do like"""
-
     like = False
     if request.user.is_authenticated:
-        like = Like_Artist.objects.filter(user_id=request.user.id).count() > 0
+        like = Like_Artist.objects.filter(user_id=request.user.id, artist_id_id=artist_id).count() > 0
 
-    artist = Artist.objects.get(id=artist_id)
+    artist = get_object_or_404(Artist, id=artist_id)
 
     context = {'like': like, 'artist': artist}
     template = "artist.html"
