@@ -75,10 +75,11 @@ def review(request, review_id=None):
                                         rating=request.POST.get("rating", None), review=request.POST.get("review", None))
             return HttpResponseRedirect(reverse('home:review', args=(rev.pk,)))
         else:
-            rev.rating = request.POST.get("rating", None)
+            rev.rating = int(request.POST.get("rating", None))
             rev.review = request.POST.get("review", None)
     else:
-        rec = get_object_or_404(Record, pk=request.GET.get("record_id", rev.record_id.id))
+        record_id = rev.record_id.id if rev else request.GET.get("record_id")
+        rec = get_object_or_404(Record, pk=record_id)
     tracks = discogs.get_record_master_by_id(rec.discogs_release_id).tracklist
 
     context = {
@@ -136,8 +137,9 @@ def record(request, record_id, collection_id=None):
     videos = discogs_record.videos
 
     votes_count = Rating.objects.filter(record_id=record_id).count()
-    rating_sums = 0
-    avg_rating = Rating.objects.filter(record_id=record_id).aggregate(Avg('rating'))
+    avg_rating = Rating.objects.filter(record_id=record_id).aggregate(avg_rating=Avg('rating'))
+    # convert to int (no half stars)
+    avg_rating = int(avg_rating["avg_rating"]) if avg_rating["avg_rating"] else None
 
     context = {'collection_to_add_to': collection_to_add_to,
                'user_rating': user_rating,
