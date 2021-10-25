@@ -123,7 +123,7 @@ def record(request, record_id, collection_id=None):
             user_rating = Rating.objects.get(
                 user_id=request.user.id, record_id_id=record_id).rating
         except:
-            user_rating = None
+            user_rating = 0
         try:
             record_found_in = Collection_Record.objects.filter(record_id_id=record_id, collection_id__in=Collection.objects.filter(
                 user_id=request.user.id))  # lista de nomes de coleções do user onde o record está    # TODO: testar
