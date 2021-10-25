@@ -23,4 +23,13 @@
     </figure>
 </div>
 
+{% if tracks %}
+    <h2>Tracks</h2>
+{% endif %}
+
+{% for track in tracks %}
+    <p>{{track.position}} | {{track.title}} | {{track.duration}}</p>    
+{% endfor %}
+
+
 {% endblock %}
