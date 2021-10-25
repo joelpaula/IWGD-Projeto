@@ -157,8 +157,8 @@ def play_record(request):
 
 
 @login_required
-def add_to_collection(request):
-    pass
+def add_to_collection(request, username, collection_id):
+    return HttpResponse("Add Album To Collection Page")
 
 
 @login_required
@@ -176,8 +176,16 @@ def add_ratreview_save(request):
     pass
 
 
-def single_collection(request):
-    pass
+def single_collection(request, username, collection_id):
+    records_list = []
+    template = 'single_collection.html'
+    collection = Collection.objects.get(pk=collection_id)
+    records = Collection_Record.objects.filter(collection_id=collection_id) # TODO: obter lista de records
+    for record in records:
+        records_list.append(Record.objects.get(pk=record.record_id.id))
+    context = {'username': username, 'collection': collection, 'records_list':records_list}
+    
+    return render(request, template, context)
 
 
 def mycollections(request, username, must_login=False):

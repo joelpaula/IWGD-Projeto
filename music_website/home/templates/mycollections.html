@@ -14,7 +14,7 @@
 {% for collection in collections_list %}
     <li>
         <p>
-            {{ collection.name }} | Link para a colecção
+              <a href="{% url 'home:single_collection' user.username collection.id %}"> {{ collection.name }} 
         </p>
     </li>
 
