@@ -95,8 +95,10 @@ def search_records(query: str) -> List[DiscogsRecord]:
         for result in response.json()["results"]:
             if any(r.discogs_master_id == result["master_id"] for r in res):
                 continue
+            # handle master id = 0
+            id = -result["id"] if result["master_id"]==0 else result["master_id"]
             record = DiscogsRecord(
-                result["title"], result["master_id"], result["cover_image"], result["year"])
+                result["title"], id, result["cover_image"], result["year"])
             res.append(record)
     finally:
         return res
@@ -117,11 +119,15 @@ def get_artist_by_id(artist_id) -> DiscogsArtist:
 
 def get_record_master_by_id(master_record_id, include_tracklist=True, include_videos=True) -> DiscogsRecord:
     res = DiscogsRecord(None, None, None, None)
-    url = f"{_baseurl}/masters/{master_record_id}"
+    master_record_id = int(master_record_id)
+    if master_record_id > 0:
+        url = f"{_baseurl}/masters/{master_record_id}"
+    else:
+        url = f"{_baseurl}/releases/{-master_record_id}"
     response = requests.request("GET", url, headers=_headers)
     rec = response.json()
     res = DiscogsRecord(title=rec["title"],
-                        discogs_master_id=rec["id"],
+                        discogs_master_id=master_record_id,
                         cover_image=rec["images"][0]["uri"],
                         year=rec["year"])
     art = rec["artists"][0]

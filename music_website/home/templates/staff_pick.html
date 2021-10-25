@@ -1,0 +1,80 @@
+{% extends './base.html' %}
+{% block content %}
+<script>
+    // JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+        }, false)
+        })
+    })()
+</script>
+<h1>Staff Pick</h1>
+
+<div class="row g-0">
+  <div class="card border-info  col-4 mb-2">
+    <img src="{{ record.cover_url }}" class="card-img-top" alt="{{ record.title }} cover image">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'home:record' record.id %}">{{ record.title }}</a></h5>
+      <p class="card-text" title="Based on {{votes_count}} user reviews">
+        {% with ''|center:avg_rating as range %}
+        {% for _ in range %}
+            <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+        {% endfor %}
+        {% endwith %}<br>
+      {{ record.year }}
+      </p>
+      <p class="card-text mb-0 ms-0"><span class="badge rounded-pill bg-secondary">artist</span></p>
+      <h6 class="card-title"><a href="{% url 'home:artist' record.artist_id.id %}">{{ record.artist_id.name }}</a></h6>
+    <div class="col-md-4">
+        <img src="{{ record.artist_id.picture_url }}" class="card-img-top" alt="{{ record.artist_id.name }} cover image">
+    </div>
+    </div>
+  </div>
+  <div class="col p-2 m-2 g-2">
+    <div class="card">
+      <div class="card-header">
+        Tracks
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for track  in tracks %}
+        <li class="list-group-item">{{track.position}} | {{track.title}} | {{track.duration}}</li>
+        {% endfor %}
+      </ul>
+    </div>    
+    <div class="row p-2 m-2 g-2">
+      <form method="POST" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="form-group has-validation mb-2 mt-2">
+          <label for="title" class="form-label">Title:</label>
+          <input type="text" class="form-control" id="title" name="title" required {% if pick %}value="{{ pick.title }}"{% endif %}>
+          <div class="invalid-feedback">
+            Please provide a title for your staff pick.
+          </div>
+        </div>
+        <div class="form-group has-validation mb-2 mt-2">
+          <label for="recommendation" class="form-label">Recommendation:</label>
+          <textarea class="form-control" id="recommendation" name="recommendation" rows="4" required>{% if pick %}{{ pick.recommendations }}{% endif %}</textarea>
+          <div class="invalid-feedback">
+            Please provide a recommendation text for your staff pick.
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary float-end">Submit</button>
+      </form>
+    </div> 
+  </div>
+</div>
+{% endblock %}

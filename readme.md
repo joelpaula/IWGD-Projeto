@@ -32,8 +32,16 @@ A Python Django website, that handles music collections and reviews.
     
     `pip install -r requirements.txt`
 
- 1. Go into the project's folder (`music_website`) and run the server:
+ 1. Go into the project's folder (`music_website`) and make sure you have the database ready:
+    
+    `python manage.py migrate`
+
+ 1. Still on the project's folder (`music_website`) run the server:
     
     `python manage.py runserver`
+
+ 1. Before you begin, you might wan't to create a super user, because they are considered "staff" and they can create and manage "staff picks" that are displayed prominently on the home page. You will be prompted for a password (don't forget it):
+ 
+    `python manage.py createsuperuser --username=superfun  --email=superfun@example.com`
 
  1. Now open your browser at http://127.0.0.1:8000/

@@ -11,7 +11,7 @@ urlpatterns = [
     path('artist/<int:artist_id>', views.artist, name='artist'),
     path('record/<int:record_id>', views.record, name='record'),
     path('artist/save/d/<int:discogs_id>', views.discogs_save_artist, name='discogs_save_artist'),
-    path('record/save/d/<int:discogs_master_id>', views.discogs_save_record, name='discogs_save_record'),
+    path('record/save/d/<str:discogs_master_id>', views.discogs_save_record, name='discogs_save_record'),
     path('artist/<int:artist_id>/like', views.save_like_artist, name='like_artist'),
     path('artist/<int:artist_id>/unlike', views.save_unlike_artist, name='unlike_artist'),
     path('review', views.review, name='review'),
@@ -22,6 +22,10 @@ urlpatterns = [
     path('mycollections/<str:username>/save_collection', views.save_new_collection, name='save_new_collection'),
     path('mycollections/<str:username>/<int:collection_id>', views.single_collection, name='single_collection'),
     path('mycollections/<str:username>/<int:collection_id>/add_new_record', views.add_to_collection, name='add_to_collection'),
+    path('staffpick', views.staff_picks, name='staff_picks'),
+    path('staffpick/<int:pick_id>', views.staff_pick_edit, name='staff_pick'),
+    path('staffpick/<int:pick_id>/delete', views.staff_pick_delete, name='staff_pick_delete'),
+    path('record/<int:record_id>/staffpick', views.staff_pick_add, name='staff_pick_add'),
 
 ]
 
