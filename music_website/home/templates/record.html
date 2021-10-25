@@ -17,19 +17,31 @@
 {% endfor %}
 {% endwith %}
 
+
 <div>
     <figure>
         <img src="{{ record.cover_url }}" alt="Cover Picture" style="width:50%">
     </figure>
 </div>
 
+<hr>
+
 {% if tracks %}
     <h2>Tracks</h2>
 {% endif %}
 
 {% for track in tracks %}
-    <p>{{track.position}} | {{track.title}} | {{track.duration}}</p>    
+    <p>{{track.position}} | {{track.title}}  ({{track.duration}})</p>    
 {% endfor %}
 
+<hr>
+
+{% if videos %}
+    <h2>Videos</h2>
+{% endif %}
+
+{% for video in videos %}
+    <p><a href="{{video.uri}}">{{video.title}}</a></p>    
+{% endfor %}
 
 {% endblock %}

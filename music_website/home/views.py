@@ -204,21 +204,20 @@ def single_collection(request, username, collection_id):
     records = Collection_Record.objects.filter(collection_id=collection_id)
     for record in records:
         records_list.append(Record.objects.get(pk=record.record_id.id))
-    user_ratings = Rating.objects.filter(user_id=request.user.id)
-    context = {'username': username, 'collection': collection,
-               'records_list': records_list, 'user_ratings': user_ratings}
-
+    user_ratings = Rating.objects.filter(user_id = collection.user_id.id)
+    context = {'username': username, 'collection': collection, 'records_list':records_list, 'user_ratings': user_ratings}
+    
     return render(request, template, context)
 
 
 def mycollections(request, username, must_login=False):
-    user = None
+    current_user = None
     if request.user.is_authenticated:
         current_user = request.user
     else:
         current_user = User.objects.get(username=username)
     collections_list = Collection.objects.filter(user_id=current_user.id)
-    return render(request, 'mycollections.html', {'collections_list': collections_list, 'current_user': current_user})
+    return render(request, 'mycollections.html', {'collections_list': collections_list, 'current_user': current_user, 'username': username, 'must_login': must_login})
 
 
 def new_collection_form(request, username):
@@ -227,7 +226,7 @@ def new_collection_form(request, username):
         return render(request, "create_collection.html")
     else:
         must_login = True
-        return HttpResponseRedirect(reverse('home:mycollections', args=(must_login,)))
+        return HttpResponseRedirect(reverse("home:mycollections", args=(username, must_login,)))
 
 
 def save_new_collection(request, username):
