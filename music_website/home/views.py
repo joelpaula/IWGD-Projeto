@@ -88,16 +88,20 @@ def save_unlike_artist(request, artist_id):
 def review(request, review_id=None):
     # Depends on receiving 'record_id' either from the POST or the Get (url)
     rev = get_object_or_404(Rating, pk=review_id) if review_id else None
-    edit_mode = True if rev.user_id_id == request.user.id else False
+    if not rev and request.GET.get("record_id"):
+        rev = Rating.objects.get(user_id_id=request.user.id, record_id_id=request.GET.get("record_id"))
+    edit_mode = False if rev and rev.user_id_id != request.user.id else True
     if request.method == "POST":
         rec = get_object_or_404(Record, pk=request.POST.get("record_id"))
-        if not rev:
+        if not rev and Rating.objects.filter(user_id_id=request.user.id, record_id=rec).count() == 0:
             rev = Rating.objects.create(user_id_id=request.user.id, record_id=rec,
                                         rating=request.POST.get("rating", None), review=request.POST.get("review", None))
             return HttpResponseRedirect(reverse('home:review', args=(rev.pk,)))
         else:
+            rev = rev or Rating.objects.get(user_id_id=request.user.id, record_id=rec)
             rev.rating = int(request.POST.get("rating", None))
             rev.review = request.POST.get("review", None)
+            rev.save()
     else:
         record_id = rev.record_id.id if rev else request.GET.get("record_id")
         rec = get_object_or_404(Record, pk=record_id)
