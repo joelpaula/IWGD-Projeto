@@ -76,6 +76,7 @@ def save_unlike_artist(request, artist_id):
 def review(request, review_id=None):
     # Depends on receiving 'record_id' either from the POST or the Get (url)
     rev = get_object_or_404(Rating, pk=review_id) if review_id else None
+    edit_mode = True if rev.user_id_id == request.user.id else False
     if request.method == "POST":
         rec = get_object_or_404(Record, pk=request.POST.get("record_id"))
         if not rev:
@@ -91,6 +92,7 @@ def review(request, review_id=None):
     tracks = discogs.get_record_master_by_id(rec.discogs_release_id).tracklist
 
     context = {
+        "edit_mode": edit_mode,
         "review": rev,
         "record": rec,
         "tracks": tracks,
