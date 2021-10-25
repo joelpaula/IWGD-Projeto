@@ -26,6 +26,9 @@ urlpatterns = [
     path('staffpick/<int:pick_id>', views.staff_pick_edit, name='staff_pick'),
     path('staffpick/<int:pick_id>/delete', views.staff_pick_delete, name='staff_pick_delete'),
     path('record/<int:record_id>/staffpick', views.staff_pick_add, name='staff_pick_add'),
-
+    path('add_to_collection/<int:record_id>', views.add_to_collection, name='add_to_collection'),
+    path('add_to_collection/<int:record_id>/save', views.add_to_collection_save, name='add_to_collection_save'),
+    path('remove_from_collection/<int:record_id>', views.remove_from_collection, name='remove_from_collection'),
+    path('remove_from_collection/<int:record_id>save', views.remove_from_collection_save, name='remove_from_collection_save'),
 ]
 

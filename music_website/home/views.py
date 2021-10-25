@@ -190,8 +190,13 @@ def staff_picks(request):
     paginator = Paginator(picks, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
     return render(request, 'staff_picks.html', {'page_obj': page_obj})
+    
+@login_required
+def add_to_collection(request, record_id):
+    user_collections = Collection.objects.filter(user_id = request.user)
+    context = {'user_collections': user_collections, 'record_id': record_id}
+    return render(request, "add_to_collection.html", context)
 
 
 @user_passes_test(_is_super_user)
@@ -250,16 +255,62 @@ def staff_pick_delete(request, pick_id):
 
 def play_record(request):
     pass
+@login_required
+def add_to_collection_save(request, record_id):
+    
+    new_addition = None
+    try:
+        new_addition = Collection_Record(record_id = Record.objects.get(pk=record_id), collection_id=Collection.objects.get(pk=request.POST['collection']))
+        collection_id = Collection.objects.get(pk=request.POST['collection'])
+            
+    except:
+        return render(request, 'add_to_collection.html', {'error_message': 'Please, choose one collection.', 'record_id': record_id})
+    
+    # TODO: lidar com IntegrityError 
+
+    else:
+        new_addition.save()
+        return HttpResponseRedirect(reverse('home:single_collection', args=(request.user.username, collection_id.id,))) 
+
+
+@login_required
+def remove_from_collection(request, record_id):
+    user_collections = Collection.objects.filter(user_id = request.user) # TODO: collections where given album is
+    collection_record_pairing = []
+    for collection in user_collections: # TODO: corrigir
+        collection_record_pairing = Collection_Record.objects.filter(collection_id = collection, record_id=record_id)
+    where_record = []
+    for collection in user_collections:
+        for pair in collection_record_pairing:
+            if collection == pair.collection_id:
+                where_record.append(collection)
+    print(collection_record_pairing)
+    print(where_record)
+    context = {'where_record': where_record, 'record_id': record_id}
+    return render(request, "remove_from_collection.html", context)
+
+
+@login_required
+def remove_from_collection_save(request, record_id):
+    
+    to_remove = None
+    try:
+        to_remove = Collection_Record(record_id = Record.objects.get(pk=record_id), collection_id=Collection.objects.get(pk=request.POST['collection']))
+        collection_id = Collection.objects.get(pk=request.POST['collection'])
+            
+    except:
+        return render(request, 'remove_from_collection.html', {'error_message': 'Please, choose one collection.', 'record_id': record_id})
+    
+    # TODO: lidar com IntegrityError 
+
+    else:
+        to_remove.delete()
+        return HttpResponseRedirect(reverse('home:single_collection', args=(request.user.username, collection_id.id,))) 
 
 
 @login_required
 def add_to_collection(request, username, collection_id):
     return HttpResponse("Add Album To Collection Page")
-
-
-@login_required
-def add_to_collection_save(request):
-    pass
 
 
 def single_collection(request, username, collection_id):

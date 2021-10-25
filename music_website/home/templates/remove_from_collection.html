@@ -1,22 +1,22 @@
 {% extends './base.html' %}
 {% block content %}
 
-<h1> Adicionar album a colecção</h1>
+<h1> Remove Album From Collection </h1>
 <br>
 
 <h2>{{ error_message }}</h2>
 <br>
 
-<form method="POST" action = "{% url 'home:add_to_collection_save' record_id %}">
+<form method="POST" action = "{% url 'home:remove_from_collection_save' record_id %}">
     {% csrf_token %}
-    {% for collection in user_collections %}
+    {% for collection in where_record %}
         <input type="radio" name="collection", id="collection{{ forloop.counter }}" value="{{ collection.id }}" />
         <label for="collection{{ forloop.counter }}">
             {{collection.name}}
         </label>
         <br>
     {% endfor %}
-    <p><input type="submit" value="Add" /></p>
+    <p><input type="submit" value="Remove" /></p>
 </form>
 
 
