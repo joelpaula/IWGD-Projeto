@@ -35,17 +35,19 @@
 <h1> {{ artist.name }} </h1>
 <img src="{{ artist.picture_url }}" class="card-img-top" alt="{{ record.title }} cover image">
 <hr>
-<h3> Biography </h3>
+<div class="position-relative">
+<h3> Biography </h3> 
 <h7> {{ artist.bio }} </h7>
 
 <br>
 
 {% if like %}
-    <p>Already liked this artist</p>
+    <a class="btn btn-success position-absolute top-0 end-0" href="{% url 'home:unlike_artist' artist.id %}" title="Already liked this artist. Press to un-like.">
+        <i class="bi bi-suit-heart-fill"></i>
+    </a>
 {% else %}
-    <p>Not yet rated</p>
-    <a href="{% url 'home:like_artist' artist.id %}">
-        Like this artist!
+    <a class="btn btn-dark position-absolute top-0 end-0" href="{% url 'home:like_artist' artist.id %}" title="Not yet rated. Press to like this artist!">
+        <i class="bi bi-suit-heart"></i>
     </a>
 {% endif %}
 <br>
@@ -77,4 +79,5 @@ TODO: links para records
 TODO: imagens de cada record
 
 -->
+</div>
 {% endblock %}
