@@ -12,11 +12,11 @@
 
 
 {% for collection in collections_list %}
-    <li>
+
         <p>
               <a href="{% url 'home:single_collection' user.username collection.id %}"> {{ collection.name }} 
         </p>
-    </li>
+
 
 {% endfor %}
 <br>
