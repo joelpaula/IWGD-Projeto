@@ -31,12 +31,13 @@
         Tracks
       </div>
       <ul class="list-group list-group-flush">
-       {% for track  in tracks %}
-        <li class="list-group-item">{{track}}</li>
+        {% for track  in tracks %}
+        <li class="list-group-item">{{track.position}} | {{track.title}} | {{track.duration}}</li>
         {% endfor %}
       </ul>
     </div>    
     <div class="row p-2 m-2 g-2">
+      {% if edit_mode %}
       <form method="POST">
         {% csrf_token %}
         <div>
@@ -62,6 +63,20 @@
         <input type="hidden" id="record_id" name="record_id" value="{{record.id}}">
         <button type="submit" class="btn btn-primary float-end">Submit</button>
       </form>
+      {% else %}
+      <div class="card g-0">
+        <div class="card-header">
+        {% with ''|center:review.rating as range %}
+        {% for _ in range %}
+            <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+        {% endfor %}
+        {% endwith %}
+        </div>
+        <div class="card-body">
+          <p>{{review.review}}</p>
+        </div>
+      </div>    
+      {% endif %}
     </div> 
   </div>
 </div>
