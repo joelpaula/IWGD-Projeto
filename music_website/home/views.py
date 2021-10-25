@@ -14,7 +14,7 @@ from home.search import Search
 from django.urls import reverse
 from home import discogs2db
 from django.utils import timezone
-from django.db.models import Avg
+from django.db.models import Avg, Count
 
 
 def register(request):
@@ -32,7 +32,18 @@ def register(request):
 
 
 def home_index(request):
-    return render(request, "index.html")
+    top_artists = Artist.objects.annotate(avg_rating=Avg('record__rating__rating'), review_count=Count(
+        'record__rating'), likes=Count('like_artist')).order_by('-avg_rating', '-review_count')[:5]
+    # .exclude(avg_rating=None) # se quisermos excluir artistas sem ratings
+
+    top_records = Record.objects.annotate(avg_rating=Avg('rating__rating'), review_count=Count(
+        'rating')).order_by('-avg_rating', '-review_count')[:5]
+
+    context = {
+        "top_artists": top_artists,
+        "top_records": top_records,
+    }
+    return render(request, "index.html", context=context)
 
 
 def search(request):
@@ -73,6 +84,7 @@ def save_unlike_artist(request, artist_id):
     finally:
         return HttpResponseRedirect(reverse('home:artist', args=(artist_id,)))
 
+
 def review(request, review_id=None):
     # Depends on receiving 'record_id' either from the POST or the Get (url)
     rev = get_object_or_404(Rating, pk=review_id) if review_id else None
@@ -102,7 +114,7 @@ def review(request, review_id=None):
 
 def reviews(request):
     res = Rating.objects.filter(user_id_id=request.user.id)
-    context={"reviews": res,}
+    context = {"reviews": res, }
     return render(request, "reviews.html", context=context)
 
 
@@ -190,20 +202,21 @@ def single_collection(request, username, collection_id):
     template = 'single_collection.html'
     collection = Collection.objects.get(pk=collection_id)
     records = Collection_Record.objects.filter(collection_id=collection_id)
-    for record in records: 
+    for record in records:
         records_list.append(Record.objects.get(pk=record.record_id.id))
-    user_ratings = Rating.objects.filter(user_id = request.user.id)
-    context = {'username': username, 'collection': collection, 'records_list':records_list, 'user_ratings': user_ratings}
-    
+    user_ratings = Rating.objects.filter(user_id=request.user.id)
+    context = {'username': username, 'collection': collection,
+               'records_list': records_list, 'user_ratings': user_ratings}
+
     return render(request, template, context)
 
 
 def mycollections(request, username, must_login=False):
     user = None
     if request.user.is_authenticated:
-        current_user = request.user 
+        current_user = request.user
     else:
-        current_user = User.objects.get(username = username)
+        current_user = User.objects.get(username=username)
     collections_list = Collection.objects.filter(user_id=current_user.id)
     return render(request, 'mycollections.html', {'collections_list': collections_list, 'current_user': current_user})
 
@@ -218,16 +231,15 @@ def new_collection_form(request, username):
 
 
 def save_new_collection(request, username):
-   
+
     new_collection = None
     try:
-        new_collection = Collection(user_id = request.user, name=request.POST['collection_name'], creation_date=timezone.now())
+        new_collection = Collection(
+            user_id=request.user, name=request.POST['collection_name'], creation_date=timezone.now())
         if not new_collection.name:
             return render(request, 'create_collection.html', {'error_message': 'Por favor, atribua um nome à nova coleção.'})
     except(KeyError):
         return HttpResponseRedirect(reverse("home:create_collection"))
     else:
         new_collection.save()
-        return HttpResponseRedirect(reverse('home:mycollections', args=(username,)))    
-  
-
+        return HttpResponseRedirect(reverse('home:mycollections', args=(username,)))
