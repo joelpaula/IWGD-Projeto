@@ -181,8 +181,13 @@ def single_collection(request):
 
 
 def mycollections(request, username, must_login=False):
-    collections_list = Collection.objects.filter(user_id=request.user.id)
-    return render(request, 'mycollections.html', {'collections_list': collections_list})
+    user = None
+    if request.user.is_authenticated:
+        current_user = request.user 
+    else:
+        current_user = User.objects.get(username = username)
+    collections_list = Collection.objects.filter(user_id=current_user.id)
+    return render(request, 'mycollections.html', {'collections_list': collections_list, 'current_user': current_user})
 
 
 def new_collection_form(request, username):
