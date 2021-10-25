@@ -35,7 +35,7 @@
 <h1> {{ artist.name }} </h1>
 <img src="{{ artist.picture_url }}" class="card-img-top" alt="{{ record.title }} cover image">
 <hr>
-<h3> Biography: </h3>
+<h3> Biography </h3>
 <h7> {{ artist.bio }} </h7>
 
 <br>
@@ -50,7 +50,7 @@
 {% endif %}
 <br>
 <hr>
-<h3> Records: </h3>
+<h3> Records </h3>
 
 {% for record in artist.record_set.all %}
     <li>
