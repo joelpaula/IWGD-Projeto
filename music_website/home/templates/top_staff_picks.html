@@ -1,0 +1,31 @@
+<h2 class="badge bg-info text-dark">staff pick</h2>
+{% for pick in staff_picks %}
+<div class="card mb-3" style="max-width: 340px;">
+  <div class="row g-0">
+    <div class="col-md-4 pb-3">
+      <img src="{{pick.record.cover_url}}" class="img-fluid rounded-start pb-2" alt="{{pick.record.title}}'s cover image">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <a class="stretched-link mt-0" href="{% url 'home:staff_pick' pick.id %}">
+          <h6 class="card-title m-0 lh-sm">{{pick.record.title}}</h6>
+        </a>
+        <small class="card-text card-text position-absolute bottom-0 start-0 translate-middle-y ms-2 lh-sm">{{pick.record.year}}</small>
+        {% with pick.avg_rating|default_if_none:0 as avg_rating %}
+        {% with ''|center:avg_rating as range %}
+        {% for _ in range %}
+            <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+        {% endfor %}
+        {% endwith %}
+        {% endwith %}
+        <p class="card-text"><small class="text-muted lh-sm">{{pick.record.artist_id.name}}</small></p>
+        <p class="card-text">
+          <small class="text-muted fw-light lh-sm"><em>{{pick.title}}</em></small></p>
+      </div>
+        {% comment %} <p class="card-text text-truncate overflow-hidden" style="max-height: 3em;">
+          <small class="lh-sm">{{pick.recommendations}}</small>
+        </p> {% endcomment %}
+    </div>
+  </div>
+</div>
+{% endfor %}
