@@ -1,13 +1,13 @@
-<h2 class="badge bg-info text-dark">staff pick</h2>
+<h2 class="badge bg-primary text-light">staff picks</h2>
 {% for pick in staff_picks %}
-<div class="card mb-3" style="max-width: 340px;">
+<div class="card mb-3 border-primary" style="max-width: 340px;">
   <div class="row g-0">
     <div class="col-md-4 pb-3">
       <img src="{{pick.record.cover_url}}" class="img-fluid rounded-start pb-2" alt="{{pick.record.title}}'s cover image">
     </div>
     <div class="col-md-8">
       <div class="card-body">
-        <a class="stretched-link mt-0" href="{% url 'home:staff_pick' pick.id %}">
+        <a class="stretched-link mt-0" href="{% url 'home:staff_pick_view' pick.id %}">
           <h6 class="card-title m-0 lh-sm">{{pick.record.title}}</h6>
         </a>
         <small class="card-text card-text position-absolute bottom-0 start-0 translate-middle-y ms-2 lh-sm">{{pick.record.year}}</small>
