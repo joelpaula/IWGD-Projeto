@@ -1,12 +1,13 @@
 {% extends './base.html' %}
 {% block content %}
 <h1>{{record.title}}</h1>
+<h4><a class="btn btn-light" href="/artist/{{ record.artist_id.id }}">{{ record.artist_id.name }}</a></h4>
+<p>
 <a href="{% url 'home:review' %}?record_id={{record.id}}">Review this record!</a>
 <a href="/add_to_collection/{{record.id}}">Add to your collection!</a>
 {% if user.is_superuser %}
 <a href="{% url 'home:staff_pick_add'  record.id %}" title="you're a superuser! Yay!">Add to staff picks!</a>
 {% endif %}
-
 
 {% if record.collection_to_add != None %}
     <h2>Collection Name</h2>
@@ -19,6 +20,7 @@
     <i class="bi bi-star-fill" style="color: #fd7e14"></i>
 {% endfor %}
 {% endwith %}
+</p>
 
 
 <div>
