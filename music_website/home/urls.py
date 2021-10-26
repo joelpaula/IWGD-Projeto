@@ -23,6 +23,7 @@ urlpatterns = [
     path('mycollections/<str:username>/save_collection', views.save_new_collection, name='save_new_collection'),
     path('mycollections/<str:username>/<int:collection_id>', views.single_collection, name='single_collection'),
     path('mycollections/<str:username>/<int:collection_id>/add_new_record', views.add_to_collection, name='add_to_collection'),
+    path('myartists', views.my_artists, name='myartists'),
     path('staffpick', views.staff_picks, name='staff_picks'),
     path('staffpick/<int:pick_id>', views.staff_pick_edit, name='staff_pick'),
     path('staffpick/<int:pick_id>/delete', views.staff_pick_delete, name='staff_pick_delete'),

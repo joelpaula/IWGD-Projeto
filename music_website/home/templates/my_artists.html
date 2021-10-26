@@ -1,0 +1,34 @@
+{% extends './base.html' %}
+{% block content %}
+
+<h1> My Artists </h1>
+{% for artist in artists %}
+<div class="card mb-3" style="max-width: 340px;">
+  <div class="row g-0">
+    <div class="col-md-4 pb-3">
+      <img src="{{artist.picture_url}}" class="img-fluid rounded-start pb-3" alt="{{artist.name}}'s picture">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body" title="{{artist.bio}}">
+        <a class="stretched-link" href="{% url 'home:artist' artist.id %}">
+            <h6 class="card-title m-0 lh-sm">{{artist.name}}</h6>
+        </a>
+        <small class="card-text card-text position-absolute bottom-0 start-0 translate-middle-y ms-2 lh-sm" title="{{artist.likes}} people like this artist">
+            <i class="bi bi-suit-heart-fill"></i> {{artist.likes}}</small>
+        <p class="card-text">
+        {% with artist.avg_rating|default_if_none:0 as avg_rating %}
+        {% with ''|center:avg_rating as range %}
+        {% for _ in range %}
+            <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+        {% endfor %}
+        {% endwith %}
+        {% endwith %}
+        {% if  artist.avg_rating %}<br><small class="text-muted lh-sm" style="font-size: xx-small;">(average rating from {{artist.review_count}} reviews)</small>{% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
