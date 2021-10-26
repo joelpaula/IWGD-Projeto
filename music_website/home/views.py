@@ -49,12 +49,13 @@ def home_index(request):
     return render(request, "index.html", context=context)
 
 
-def search(request):
+def search(request, collection_id=None):
     context = {}
     if request.method == "POST" and request.POST["query"]:
         context["query"] = request.POST["query"]
         res = Search().search(request.POST["query"])
         context["results"] = res
+    context['collection_id'] = collection_id
     return render(request, "search.html", context=context)
 
 
@@ -209,38 +210,11 @@ def add_to_collection_save(request, record_id):
 
 
 @login_required
-def remove_from_collection(request, record_id):
-    user_collections = Collection.objects.filter(user_id = request.user) # TODO: collections where given album is
-    collection_record_pairing = []
-    for collection in user_collections: # TODO: corrigir
-        collection_record_pairing = Collection_Record.objects.filter(collection_id = collection, record_id=record_id)
-    where_record = []
-    for collection in user_collections:
-        for pair in collection_record_pairing:
-            if collection == pair.collection_id:
-                where_record.append(collection)
-    print(collection_record_pairing)
-    print(where_record)
-    context = {'where_record': where_record, 'record_id': record_id}
-    return render(request, "remove_from_collection.html", context)
-
-
-@login_required
-def remove_from_collection_save(request, record_id):
+def remove_from_collection(request, collection_id, record_id):
     
-    to_remove = None
-    try:
-        to_remove = Collection_Record(record_id = Record.objects.get(pk=record_id), collection_id=Collection.objects.get(pk=request.POST['collection']))
-        collection_id = Collection.objects.get(pk=request.POST['collection'])
-            
-    except:
-        return render(request, 'remove_from_collection.html', {'error_message': 'Please, choose one collection.', 'record_id': record_id})
-    
-    # TODO: lidar com IntegrityError 
-
-    else:
-        to_remove.delete()
-        return HttpResponseRedirect(reverse('home:single_collection', args=(request.user.username, collection_id.id,))) 
+    to_remove = Collection_Record.objects.get(collection_id = collection_id, record_id = record_id)
+    to_remove.delete()
+    return HttpResponseRedirect(reverse('home:single_collection', args=(request.user.username, collection_id,))) 
 
 
 @login_required
