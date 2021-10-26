@@ -9,11 +9,15 @@
 
 <form method="POST" action = "{% url 'home:save_new_collection' user.username %}">
     {% csrf_token %}
+    <div>
     <label for="collection_name">Collection name:</label>
     <input type="text" id="collection_name" name="collection_name" autofocus>
-    <p>
-        <input type="submit" value="Criar">
-    </p>
+    </div>
+    <br>
+        <p>
+            <input class="btn btn-primary" type="submit" value="Criar">
+        </p>
+
 </form>
 
 
