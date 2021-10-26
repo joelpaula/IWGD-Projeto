@@ -10,13 +10,15 @@
 <form method="POST" action = "{% url 'home:add_to_collection_save' record_id %}">
     {% csrf_token %}
     {% for collection in user_collections %}
-        <input type="radio" name="collection", id="collection{{ forloop.counter }}" value="{{ collection.id }}" />
-        <label for="collection{{ forloop.counter }}">
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="collection", id="collection{{ forloop.counter }}" value="{{ collection.id }}" />
+        <label class="form-check-label" for="collection{{ forloop.counter }}">
             {{collection.name}}
         </label>
+    </div>
         <br>
     {% endfor %}
-    <p><input type="submit" value="Add" /></p>
+    <p><input class="btn btn-primary" type="submit" value="Add" /></p>
 </form>
 
 
