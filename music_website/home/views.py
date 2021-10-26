@@ -106,12 +106,12 @@ def review(request, review_id=None):
         if not rev and Rating.objects.filter(user_id_id=request.user.id, record_id=rec).count() == 0:
             rev = Rating.objects.create(user_id_id=request.user.id, record_id=rec,
                                         rating=request.POST.get("rating", None), review=request.POST.get("review", None))
-            return HttpResponseRedirect(reverse('home:review', args=(rev.pk,)))
         else:
             rev = rev or Rating.objects.get(user_id_id=request.user.id, record_id=rec)
             rev.rating = int(request.POST.get("rating", None))
             rev.review = request.POST.get("review", None)
             rev.save()
+        return HttpResponseRedirect(reverse('home:record', args=(rec.pk,)))     
     else:
         record_id = rev.record_id.id if rev else request.GET.get("record_id")
         rec = get_object_or_404(Record, pk=record_id)
@@ -335,7 +335,8 @@ def save_new_collection(request, username):
 
 
 def my_artists(request):
-    artists = None
+    artists = Artist.objects.filter(like_artist__user_id=request.user).annotate(avg_rating=Avg('record__rating__rating'), 
+        review_count=Count('record__rating'), likes=Count('like_artist')).order_by('-avg_rating', '-review_count')
     context = {
         "artists": artists,
     }

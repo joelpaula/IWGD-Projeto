@@ -73,13 +73,17 @@ def search_artists(query: str) -> List[DiscogsArtist]:
     payload = {"type": "artist", "q": query}
     response = requests.request("GET", url, headers=_headers, params=payload)
 
-    for result in response.json()["results"][0:5]:
+    for result in response.json()["results"]:
+        if str(result["cover_image"]).endswith("spacer.gif"):
+            continue
         artist = DiscogsArtist(
             result["title"], result["id"], result["cover_image"])
         url = f"{_baseurl}/artists/{artist.discogs_id}"
         response = requests.request("GET", url, headers=_headers)
         artist.bio = response.json()["profile"]
         res.append(artist)
+        if len(res) >= 5: 
+            break
 
     return res
 
