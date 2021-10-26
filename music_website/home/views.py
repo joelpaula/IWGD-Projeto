@@ -16,6 +16,7 @@ from home import discogs2db
 from django.utils import timezone
 from django.db.models import Avg, Count
 from django.core.paginator import Paginator
+from django.db import IntegrityError
 
 
 def register(request):
@@ -277,19 +278,16 @@ def play_record(request):
     pass
 @login_required
 def add_to_collection_save(request, record_id):
-    
     new_addition = None
     try:
-        new_addition = Collection_Record(record_id = Record.objects.get(pk=record_id), collection_id=Collection.objects.get(pk=request.POST['collection']))
-        collection_id = Collection.objects.get(pk=request.POST['collection'])
-            
-    except:
-        return render(request, 'add_to_collection.html', {'error_message': 'Please, choose one collection.', 'record_id': record_id})
-    
-    # TODO: lidar com IntegrityError 
-
+        new_addition = Collection_Record.objects.create(record_id = Record.objects.get(pk=record_id), collection_id=Collection.objects.get(pk=request.POST['collection']))
+        collection_id = Collection.objects.get(pk=request.POST['collection'])            
+    except (IntegrityError):
+        collection_id = Collection.objects.get(pk=request.POST['collection'])            
+        return HttpResponseRedirect(reverse('home:single_collection', args=(request.user.username, collection_id.id,))) 
+    except BaseException as err:
+        return render(request, 'add_to_collection.html', {'error_message': f"Unexpected {err=}, {type(err)=}", 'record_id': record_id})
     else:
-        new_addition.save()
         return HttpResponseRedirect(reverse('home:single_collection', args=(request.user.username, collection_id.id,))) 
 
 
