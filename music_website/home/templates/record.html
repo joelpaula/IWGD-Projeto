@@ -3,6 +3,9 @@
 <h1>{{record.title}}</h1>
 <a href="{% url 'home:review' %}?record_id={{record.id}}">Review this record!</a>
 <a href="/add_to_collection/{{record.id}}">Add to your collection!</a>
+{% if user.is_superuser %}
+<a href="{% url 'home:staff_pick_add'  record.id %}" title="you're a superuser! Yay!">Add to staff picks!</a>
+{% endif %}
 
 
 {% if record.collection_to_add != None %}

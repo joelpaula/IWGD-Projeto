@@ -13,7 +13,7 @@ class Collection(models.Model):
     creation_date = models.DateTimeField('Data de Criação') # collection creation date
 
     def __str__(self):
-        return f"Coleção {self.name}, do user {self.user_id}"
+        return f"Collection {self.name}, from user {self.user_id}"
 
 
 class Artist(models.Model):
@@ -71,3 +71,12 @@ class Like_Artist(models.Model):
 
     class Meta:
         unique_together = [['user_id', 'artist_id']]
+
+
+class Staff_Picks(models.Model):
+    """Super user (staff) recommends a record | id; user(FK PK); record(FK PK); title (char[200]); recommendations (text), creation_date"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    record = models.ForeignKey(Record, on_delete=models.CASCADE, default=0)
+    title = models.CharField(max_length=200, null=False)
+    recommendations = models.TextField()
+    creation_date = models.DateTimeField(default=timezone.now)

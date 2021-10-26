@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from home.models import Artist, Rating, Record, Like_Artist, Collection, Collection_Record
-from django.contrib.auth.decorators import login_required
+from home.models import Artist, Rating, Record, Like_Artist, Collection, Collection_Record, Staff_Picks
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse
 from home import discogs
 from .forms import NewUserForm
@@ -15,6 +15,7 @@ from django.urls import reverse
 from home import discogs2db
 from django.utils import timezone
 from django.db.models import Avg, Count
+from django.core.paginator import Paginator
 
 
 def register(request):
@@ -94,7 +95,7 @@ def review(request, review_id=None):
     rev = get_object_or_404(Rating, pk=review_id) if review_id else None
     if not rev and request.GET.get("record_id"):
         rev = Rating.objects.get(user_id_id=request.user.id, record_id_id=request.GET.get("record_id"))
-    edit_mode = False if rev and rev.user_id_id != request.user.id else True
+    edit_mode = False if rev and rev.user_id.id != request.user.id else True
     if request.method == "POST":
         rec = get_object_or_404(Record, pk=request.POST.get("record_id"))
         if not rev and Rating.objects.filter(user_id_id=request.user.id, record_id=rec).count() == 0:
@@ -180,10 +181,18 @@ def record(request, record_id, collection_id=None):
     return render(request, template_name=template, context=context)
 
 
-def play_record(request):
-    pass
+def _is_super_user(user):
+    return user.is_superuser
 
 
+@user_passes_test(_is_super_user)
+def staff_picks(request):
+    picks = Staff_Picks.objects.all().order_by('-creation_date')
+    paginator = Paginator(picks, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'staff_picks.html', {'page_obj': page_obj})
+    
 @login_required
 def add_to_collection(request, record_id):
     user_collections = Collection.objects.filter(user_id = request.user)
@@ -191,6 +200,62 @@ def add_to_collection(request, record_id):
     return render(request, "add_to_collection.html", context)
 
 
+@user_passes_test(_is_super_user)
+def staff_pick_edit(request, pick_id):
+    sp = get_object_or_404(Staff_Picks, pk=pick_id)
+    if request.method=="POST":
+        if request.POST.get("title") and request.POST.get("recommendation"):
+            sp.title=request.POST.get("title") 
+            sp.recommendations=request.POST.get("recommendation")
+            sp.save()
+            return HttpResponseRedirect(reverse('home:staff_picks'))
+    rec = sp.record
+    votes_count = Rating.objects.filter(record_id=rec).count()
+    avg_rating = Rating.objects.filter(record_id=rec).aggregate(avg_rating=Avg('rating'))
+    # convert to int (no half stars)
+    avg_rating = int(avg_rating["avg_rating"]) if avg_rating["avg_rating"] else 0
+    tracks = discogs.get_record_master_by_id(rec.discogs_release_id).tracklist
+    context = {
+        "record": rec,
+        "votes_count": votes_count,
+        "avg_rating": avg_rating,
+        "tracks": tracks,
+        "pick": sp,
+        }
+    return render(request, 'staff_pick.html', context)
+
+
+@user_passes_test(_is_super_user)
+def staff_pick_add(request, record_id):
+    rec = get_object_or_404(Record, pk=record_id)
+    if request.method=="POST":
+        if request.POST.get("title") and request.POST.get("recommendation"):
+            sp = Staff_Picks.objects.create(user=request.user, record=rec, 
+                    title=request.POST.get("title"), 
+                    recommendations=request.POST.get("recommendation"))
+            return HttpResponseRedirect(reverse('home:staff_picks'))
+    votes_count = Rating.objects.filter(record_id=record_id).count()
+    avg_rating = Rating.objects.filter(record_id=record_id).aggregate(avg_rating=Avg('rating'))
+    # convert to int (no half stars)
+    avg_rating = int(avg_rating["avg_rating"]) if avg_rating["avg_rating"] else 0
+    tracks = discogs.get_record_master_by_id(rec.discogs_release_id).tracklist
+    context = {
+        "record": rec,
+        "votes_count": votes_count,
+        "avg_rating": avg_rating,
+        "tracks": tracks
+        }
+    return render(request, 'staff_pick.html', context)
+
+
+@user_passes_test(_is_super_user)
+def staff_pick_delete(request, pick_id):
+    get_object_or_404(Staff_Picks, pk=pick_id).delete()
+    return HttpResponseRedirect(reverse('home:staff_picks'))
+
+
+def play_record(request):
+    pass
 @login_required
 def add_to_collection_save(request, record_id):
     
@@ -215,16 +280,6 @@ def remove_from_collection(request, collection_id, record_id):
     to_remove = Collection_Record.objects.get(collection_id = collection_id, record_id = record_id)
     to_remove.delete()
     return HttpResponseRedirect(reverse('home:single_collection', args=(request.user.username, collection_id,))) 
-
-
-@login_required
-def add_ratreview(request):
-    pass
-
-
-@login_required
-def add_ratreview_save(request):
-    pass
 
 
 def single_collection(request, username, collection_id):
