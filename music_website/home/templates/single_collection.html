@@ -2,11 +2,11 @@
 {% block content %}
 
 
-<h1> Colecção "{{ collection.name }}" </h1>
+<h1> Collection "{{ collection.name }}" </h1>
 <br>
 <p>
-    Criador: {{ username }} <br>
-    Data de criação: {{ collection.creation_date }}
+    Creator: {{ username }} <br>
+    Date of creation: {{ collection.creation_date }}
 </p>
 <br>
 
@@ -20,17 +20,17 @@
     {% for rating in user_ratings %}
         {% if rating.record_id == record %}
             Rating: {{ rating.rating }} |
-            <a href= "{% url 'home:review' rating.id %}"> Check Review </a> |
+            <a href= "{% url 'home:review' rating.id %}"> Check review </a> |
         {% endif %}
     {% endfor %}
     
-    <a href= "{% url 'home:remove_from_collection' collection.id record.id %}"> Remove Record from this Collection </a> |
+    <a href= "{% url 'home:remove_from_collection' collection.id record.id %}"> Remove record from this Collection </a> |
 </p>    
 {% endfor %}
 
 
 <p>
-    <a href="{% url 'home:search' %}?collection_id={{collection.id}}"> Adicionar um álbum à colecção
+    <a href="{% url 'home:search' %}?collection_id={{collection.id}}"> Add record to collection </a>
 </p>
 
 
