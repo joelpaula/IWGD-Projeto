@@ -15,13 +15,18 @@
 
 <ol class="list-group list-group-numbered">
     {% for collection in collections_list %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="row">
+        <li class="list-group-item d-flex justify-content-between align-items-start col-8">
             <div class="ms-2 me-auto">
               <div class="fw-bold"><a class="stretched-link" href="{% url 'home:single_collection' current_user.username collection.id %}">  {{ collection.name }} </a></div>
               {{ collection.creation_date }}
             </div>
             <span class="badge bg-primary rounded-pill">{{ collection.collection_record_set.count }}</span>
         </li>
+        <div class="col-4">
+        <a class="btn btn-danger btn-sm" href="{% url 'home:delete_collection' collection.id %}">delete collection</a>
+        </div>
+        </div>
 {% endfor %}
 </ol>
 

@@ -1,0 +1,30 @@
+{% extends './base.html' %}
+{% block content %}
+<h1>Staff Pick</h1>
+
+<div class="row g-0">
+  <div class="card border-info  col-4 mb-2">
+    <img src="{{ pick.record.cover_url }}" class="card-img-top" alt="{{ pick.record.title }} cover image">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'home:record' pick.record.id %}">{{ pick.record.title }}</a></h5>
+      <p class="card-text" title="Based on {{votes_count}} user reviews">
+        {% with ''|center:avg_rating as range %}
+        {% for _ in range %}
+            <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+        {% endfor %}
+        {% endwith %}<br>
+      {{ pick.record.year }}
+      </p>
+      <p class="card-text mb-0 ms-0"><span class="badge rounded-pill bg-secondary">artist</span></p>
+      <h6 class="card-title"><a href="{% url 'home:artist' pick.record.artist_id.id %}">{{ pick.record.artist_id.name }}</a></h6>
+    <div class="col-md-4">
+        <img src="{{ pick.record.artist_id.picture_url }}" class="card-img-top" alt="{{ pick.record.artist_id.name }} cover image">
+    </div>
+    </div>
+  </div>
+  <div class="col p-2 m-2 g-2">
+    <h2>{{ pick.title }}</h2>
+    <p>{{ pick.recommendations }}</p>
+  </div>
+</div>
+{% endblock %}

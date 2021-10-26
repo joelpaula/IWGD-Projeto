@@ -253,6 +253,20 @@ def staff_pick_add(request, record_id):
     return render(request, 'staff_pick.html', context)
 
 
+def staff_pick_view(request, pick_id):
+    pick = get_object_or_404(Staff_Picks, pk=pick_id)
+    votes_count = Rating.objects.filter(record_id=pick.record.id).count()
+    avg_rating = Rating.objects.filter(record_id=pick.record.id).aggregate(avg_rating=Avg('rating'))
+    # convert to int (no half stars)
+    avg_rating = int(avg_rating["avg_rating"]) if avg_rating["avg_rating"] else 0
+    context = {
+        "votes_count": votes_count,
+        "avg_rating": avg_rating,
+        "pick": pick
+        }
+    return render(request, 'staff_pick_view.html', context)
+
+
 @user_passes_test(_is_super_user)
 def staff_pick_delete(request, pick_id):
     get_object_or_404(Staff_Picks, pk=pick_id).delete()
@@ -332,6 +346,11 @@ def save_new_collection(request, username):
     else:
         new_collection.save()
         return HttpResponseRedirect(reverse('home:mycollections', args=(username,)))
+
+
+def delete_collection(request, collection_id):
+    get_object_or_404(Collection, pk=collection_id).delete()
+    return HttpResponseRedirect(reverse('home:mycollections', args=(request.user.username,)))
 
 
 def my_artists(request):
