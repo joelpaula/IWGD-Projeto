@@ -16,22 +16,22 @@
       <!-- header -->
       <div class="row justify-content-center">
         <a class="col-6 g-0" href="{% url 'home:home_index' %}">
-          <img class="col-10" src="{% static 'home/images/rgb_iscte_pt_horizontal_positive.png' %}">
+          <img class="col-6" src="{% static 'home/images/rgb_iscte_pt_horizontal_positive.png' %}">
         </a>
         <div class="col-4">
           <hr class="mt-0 mb-4">
           <div>
             {% if user.is_authenticated %}
-              Hello, {{ user.username }}!
+            <i class="bi bi-person"></i> Hello, {{ user.username }}!
             {% else %}
-              <a href="{% url 'home:register' %}">Register</a>
+            <i class="bi bi-pencil-square"></i> <a href="{% url 'home:register' %}">Register</a>
             {% endif %}
           </div>
           <div>
             {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}">Logout</a>
+            <i class="bi bi-box-arrow-right"></i> <a href="{% url 'logout' %}">Logout</a>
             {% else %}
-                <a href="{% url 'login' %}">Login</a>
+            <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}">Login</a>
             {% endif %}
           </div>
         </div>
@@ -78,7 +78,7 @@
     <!-- Footer -->
     <footer class="bg-dark">
     <div class="container"><div class="row justify-content-center">
-        <p class="small mt-2 mb-1 text-info col-8">Author:  Catarina Castanheira |
+        <p class="small mt-2 mb-1 text-info col-8">Authors:  Catarina Castanheira |
                   João Martins |
                   Joel Paula
         </p>
