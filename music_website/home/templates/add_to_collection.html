@@ -17,8 +17,11 @@
         </label>
     </div>
         <br>
+    {% empty %}
+    <p>You don't have any collections</p>
+    <a href="{% url 'home:new_collection_form' user.username %}" class="btn btn-primary">Create a collection</a>
     {% endfor %}
-    <p><input class="btn btn-primary" type="submit" value="Add" /></p>
+    {% if user_collections%}<p><input class="btn btn-primary" type="submit" value="Add" /></p>{% endif %}
 </form>
 
 
