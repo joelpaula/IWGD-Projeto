@@ -335,7 +335,8 @@ def save_new_collection(request, username):
 
 
 def my_artists(request):
-    artists = None
+    artists = Artist.objects.filter(like_artist__user_id=request.user).annotate(avg_rating=Avg('record__rating__rating'), 
+        review_count=Count('record__rating'), likes=Count('like_artist')).order_by('-avg_rating', '-review_count')
     context = {
         "artists": artists,
     }
