@@ -22,8 +22,8 @@ class Artist(models.Model):
     # artist_id PK
     discogs_artist_id = models.IntegerField()  # artist id as in discogs
     name = models.CharField(max_length=200)
-    bio = models.TextField()  # artist biography
-    picture_url = models.URLField()  # artist picture url
+    bio = models.TextField(null=True)  # artist biography
+    picture_url = models.URLField(null=True)  # artist picture url
 
     def __str__(self):
         return self.name
@@ -37,7 +37,7 @@ class Record(models.Model):
     discogs_release_id = models.IntegerField()  # album id as in discogs
     title = models.CharField(max_length=200)  # album title
     year = models.IntegerField()  # album release date
-    cover_url = models.URLField()  # album front cover url
+    cover_url = models.URLField(null=True)  # album front cover url
 
     def __str__(self):
         return self.title

@@ -116,7 +116,9 @@ def get_artist_by_id(artist_id) -> DiscogsArtist:
     art = response.json()
     res = DiscogsArtist(title=art["name"],
                         discogs_id=art["id"],
-                        cover_image=art["images"][0]["uri"])
+                        cover_image=None)
+    if art.get("images") and len(art["images"]):
+        res.cover_image = art["images"][0]["uri"]
     res.bio = art["profile"]
 
     return res
@@ -133,12 +135,14 @@ def get_record_master_by_id(master_record_id, include_tracklist=True, include_vi
     rec = response.json()
     res = DiscogsRecord(title=rec["title"],
                         discogs_master_id=master_record_id,
-                        cover_image=rec["images"][0]["uri"],
+                        cover_image=None,
                         year=rec["year"])
+    if rec.get("images") and len(rec["images"]):
+        res.cover_image = rec["images"][0]["uri"]
     art = rec["artists"][0]
     res.artist = DiscogsArtist(
         art["name"], art["id"], art.get("thumbnail_url", ""))
-    if include_tracklist:
+    if include_tracklist and rec.get("tracklist"):
         for track in rec["tracklist"]:
             res.tracklist.append(DiscogsTrack(
                 track["title"], track["position"], track["duration"]))
