@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.home_index, name='home_index'),
     path('register', views.register, name="register"),
     path('search', views.search, name="search"),
+    path('search/<int:collection_id>', views.search, name="search"),
     path('artist/<int:artist_id>', views.artist, name='artist'),
     path('record/<int:record_id>', views.record, name='record'),
     path('artist/save/d/<int:discogs_id>', views.discogs_save_artist, name='discogs_save_artist'),
@@ -28,7 +29,7 @@ urlpatterns = [
     path('record/<int:record_id>/staffpick', views.staff_pick_add, name='staff_pick_add'),
     path('add_to_collection/<int:record_id>', views.add_to_collection, name='add_to_collection'),
     path('add_to_collection/<int:record_id>/save', views.add_to_collection_save, name='add_to_collection_save'),
-    path('remove_from_collection/<int:record_id>', views.remove_from_collection, name='remove_from_collection'),
-    path('remove_from_collection/<int:record_id>save', views.remove_from_collection_save, name='remove_from_collection_save'),
+    path('remove_from_collection/<int:collection_id>/<int:record_id>', views.remove_from_collection, name='remove_from_collection'),
+
 ]
 
