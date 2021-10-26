@@ -68,8 +68,7 @@
 {% for record in artist.record_set.all %}
     <div class="card col-6 mb-2">
         <img src="{{ record.cover_url }}" class="card-img-top" alt="{{ record.title }} cover image">
-        <h5 class="card-title">{{ record.title }}</h5>
-        <a href="/record/{{record.id}}">Go to record!</a>
+        <a class="btn btn-primary" href="/record/{{record.id}}">Go to record!</a>
     </div>
     {% endfor %}
 </div>
