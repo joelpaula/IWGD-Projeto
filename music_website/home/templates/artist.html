@@ -53,25 +53,20 @@
 <br>
 <hr>
 <h3> Records </h3>
+<br>
 
+<div class="row g-0">
 {% for record in artist.record_set.all %}
-    <li>
-        <p>
-            {{ record.title }} | {{ record.year }} 
-        </p>
-    </li>
-
-{% endfor %}
-
-
-<div>
-{% for record in artist.record_set.all %}
-    <div class="card col-6 mb-2">
+    <div class="card mb-3 me-3 col-4" style="width: 18rem;">
         <img src="{{ record.cover_url }}" class="card-img-top" alt="{{ record.title }} cover image">
-        <a class="btn btn-primary" href="/record/{{record.id}}">Go to record!</a>
+            <div class="card-body">
+                <h6 class="card-title">{{ record.title }} | {{ record.year }}</h6>
+                <a href="/record/{{record.id}}" style="width: 16rem;" class="btn btn-primary">Go to record!</a>
+            </div>
     </div>
-    {% endfor %}
+{% endfor %}
 </div>
+
 
 <!--
 TODO: place somewhere {{ artist.picture_url }}
