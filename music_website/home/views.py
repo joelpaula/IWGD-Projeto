@@ -127,6 +127,15 @@ def review(request, review_id=None):
     return render(request, "review.html", context=context)
 
 
+def review_view(request, review_id):
+    rev = get_object_or_404(Rating, pk=review_id)
+    context = {
+        "review": rev,
+    }
+    return render(request, "review_view.html", context=context)
+
+
+
 def reviews(request):
     res = Rating.objects.filter(user_id_id=request.user.id)
     context = {"reviews": res, }
@@ -164,7 +173,7 @@ def record(request, record_id, collection_id=None):
             record_found_in = []
 
     collection_to_add_to = collection_id
-    record = Record.objects.get(id=record_id)  # obtém objecto record
+    record = get_object_or_404(Record, id=record_id)  # obtém objecto record
     discogs_record = discogs.get_record_master_by_id(record.discogs_release_id)
     tracks = discogs_record.tracklist
     videos = discogs_record.videos
@@ -198,6 +207,7 @@ def staff_picks(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'staff_picks.html', {'page_obj': page_obj})
+ 
     
 @login_required
 def add_to_collection(request, record_id):
@@ -274,8 +284,6 @@ def staff_pick_delete(request, pick_id):
     return HttpResponseRedirect(reverse('home:staff_picks'))
 
 
-def play_record(request):
-    pass
 @login_required
 def add_to_collection_save(request, record_id):
     new_addition = None
@@ -293,7 +301,6 @@ def add_to_collection_save(request, record_id):
 
 @login_required
 def remove_from_collection(request, collection_id, record_id):
-    
     to_remove = Collection_Record.objects.get(collection_id = collection_id, record_id = record_id)
     to_remove.delete()
     return HttpResponseRedirect(reverse('home:single_collection', args=(request.user.username, collection_id,))) 
@@ -301,9 +308,8 @@ def remove_from_collection(request, collection_id, record_id):
 
 def single_collection(request, username, collection_id):
     records_list = []
-    #ratings_list = []
     template = 'single_collection.html'
-    collection = Collection.objects.get(pk=collection_id)
+    collection = get_object_or_404(Collection, pk=collection_id)
     records = Collection_Record.objects.filter(collection_id=collection_id)
     for record in records:
         records_list.append(Record.objects.get(pk=record.record_id.id))

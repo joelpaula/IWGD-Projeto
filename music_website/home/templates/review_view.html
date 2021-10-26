@@ -1,0 +1,47 @@
+{% extends './base.html' %}
+{% block content %}
+<h1>Review</h1>
+
+<div class="row g-0">
+  <div class="card border-info  col-4 mb-2">
+    <img src="{{ review.record_id.cover_url }}" class="card-img-top" alt="{{ review.record_id.title }} cover image">
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'home:record' review.record_id.id %}">{{ review.record_id.title }}</a></h5>
+      <p class="card-text" >
+      {{ record.year }}
+      </p>
+    </div>
+  </div>
+  <div class="col p-2 m-2 g-2">
+    <div class="card mb-3">
+      <div class="row g-0">
+        <div class="col-md-8">
+          <div class="card-body">
+            <h6 class="card-title"><a href="{% url 'home:artist' review.record_id.artist_id.id %}">{{ review.record_id.artist_id.name }}</a></h6>
+            <p class="card-text"><span class="badge rounded-pill bg-secondary">artist</span></p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <img src="{{ review.record_id.artist_id.picture_url }}" class="card-img-top" alt="{{ review.record_id.artist_id.name }} cover image">
+        </div>
+      </div> 
+    </div>
+    <div class="row p-2 m-2 g-2">
+      <div class="card g-0">
+        <div class="card-header">
+        {% with ''|center:review.rating as range %}
+        {% for _ in range %}
+            <i class="bi bi-star-fill" style="color: #fd7e14"></i>
+        {% endfor %}
+        {% endwith %}
+        </div>
+        <div class="card-body">
+          <p>{{review.review}}</p>
+        </div>
+      </div>    
+    </div> 
+  </div>
+</div>
+
+
+{% endblock %}

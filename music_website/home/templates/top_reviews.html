@@ -7,7 +7,7 @@
     </div>
     <div class="col-md-8">
       <div class="card-body">
-        <a class="stretched-link mt-0" href="{% url 'home:record' review.record_id.id %}">
+        <a class="stretched-link mt-0" href="{% url 'home:review_view' review.id %}">
           <h6 class="card-title m-0 lh-sm">{{review.record_id.title}}</h6>
         </a>
         <small class="card-text card-text position-absolute bottom-0 start-0 translate-middle-y ms-2 lh-sm">{{review.record_id.year}}</small>

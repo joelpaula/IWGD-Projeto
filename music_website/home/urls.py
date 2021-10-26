@@ -17,6 +17,7 @@ urlpatterns = [
     path('artist/<int:artist_id>/unlike', views.save_unlike_artist, name='unlike_artist'),
     path('review', views.review, name='review'),
     path('review/<int:review_id>', views.review, name='review'),
+    path('review/<int:review_id>/view', views.review_view, name='review_view'),
     path('reviews', views.reviews, name='reviews'),
     path('mycollections/<str:username>', views.mycollections, name='mycollections'),
     path('mycollections/<str:username>/new_collection', views.new_collection_form, name='new_collection_form'),
