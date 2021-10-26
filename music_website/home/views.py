@@ -98,7 +98,8 @@ def review(request, review_id=None):
     # Depends on receiving 'record_id' either from the POST or the Get (url)
     rev = get_object_or_404(Rating, pk=review_id) if review_id else None
     if not rev and request.GET.get("record_id"):
-        rev = Rating.objects.get(user_id_id=request.user.id, record_id_id=request.GET.get("record_id"))
+        rec_id = int(request.GET.get("record_id"))
+        rev = Rating.objects.get(user_id_id=request.user.id, record_id_id=rec_id) if Rating.objects.filter(user_id_id=request.user.id, record_id_id=rec_id).count()>0 else None
     edit_mode = False if rev and rev.user_id.id != request.user.id else True
     if request.method == "POST":
         rec = get_object_or_404(Record, pk=request.POST.get("record_id"))
@@ -320,7 +321,6 @@ def new_collection_form(request, username):
 
 
 def save_new_collection(request, username):
-
     new_collection = None
     try:
         new_collection = Collection(
@@ -332,3 +332,11 @@ def save_new_collection(request, username):
     else:
         new_collection.save()
         return HttpResponseRedirect(reverse('home:mycollections', args=(username,)))
+
+
+def my_artists(request):
+    artists = None
+    context = {
+        "artists": artists,
+    }
+    return render(request, 'my_artists.html', context)
