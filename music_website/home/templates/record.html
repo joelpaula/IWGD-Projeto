@@ -3,7 +3,7 @@
 <h1>{{record.title}}</h1>
 <h4><a class="btn btn-light" href="/artist/{{ record.artist_id.id }}">{{ record.artist_id.name }}</a></h4>
 <p>
-<a class="btn btn-primary" href="{% url 'home:review' %}?record_id={{record.id}}">Review this record!</a>
+{% if user.is_authenticated %}<a class="btn btn-primary" href="{% url 'home:review' %}?record_id={{record.id}}">Review this record!</a>{% endif %}
 <a class="btn btn-primary" href="/add_to_collection/{{record.id}}">Add to your collection!</a>
 {% if user.is_superuser %}
 <a class="btn btn-primary" href="{% url 'home:staff_pick_add'  record.id %}" title="you're a superuser! Yay!">Add to staff picks!</a>
