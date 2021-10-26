@@ -96,7 +96,8 @@ def search_records(query: str) -> List[DiscogsRecord]:
             if any(r.discogs_master_id == result["master_id"] for r in res):
                 continue
             # handle master id = 0
-            id = -result["id"] if result["master_id"]==0 else result["master_id"]
+            id = - \
+                result["id"] if result["master_id"] == 0 else result["master_id"]
             record = DiscogsRecord(
                 result["title"], id, result["cover_image"], result["year"])
             res.append(record)
@@ -137,7 +138,7 @@ def get_record_master_by_id(master_record_id, include_tracklist=True, include_vi
         for track in rec["tracklist"]:
             res.tracklist.append(DiscogsTrack(
                 track["title"], track["position"], track["duration"]))
-    if include_videos:
+    if include_videos and rec.get("videos"):
         for video in rec["videos"]:
             res.videos.append(DiscogsVideos(
                 video["title"], video["uri"], video["description"]))
